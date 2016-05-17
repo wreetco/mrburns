@@ -2,6 +2,7 @@ var examples = require('./app/controllers/example.js');
 var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
 var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
+var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 
 module.exports = function(app) {
 // example model route
@@ -38,6 +39,16 @@ app.get('/contact', function(req, res) {
 });
 // end get /contact
 // end contact actions
+
+/*
+  * Field actions
+*/
+// GET /field
+app.get('/field', function(req, res) {
+  res.send(FieldCtrl.demo());
+});
+// end get /field
+// end field actions
 
 
 };
