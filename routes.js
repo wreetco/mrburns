@@ -3,6 +3,7 @@ var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
 var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
+var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
 
 module.exports = function(app) {
 // example model route
@@ -49,6 +50,16 @@ app.get('/field', function(req, res) {
 });
 // end get /field
 // end field actions
+
+/*
+  * User actions
+*/
+// GET /user
+app.get('/user', function(req, res) {
+  res.send(UserCtrl.demo());
+});
+// end get /user
+// end user actions
 
 
 };
