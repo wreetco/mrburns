@@ -14,18 +14,5 @@ account_schema.methods.demo = function() {
 var Account = mongoose.model('Account', account_schema);
 
 
-var t = new Account({
-  email: "test@hello.com",
-  password: "some_hash_val",
-  billing: "encrypted_string",
-  managers: [{
-    man_prop: "value"
-  }]
-});
-
-t.demo();
-
 // send it out there
-module.exports = {
-  Account: Account
-}
+module.exports = Account;

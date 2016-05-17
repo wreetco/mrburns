@@ -13,14 +13,5 @@ tag_schema.methods.demo = function() {
 var Tag = mongoose.model('Tag', tag_schema);
 
 
-var t = new Tag({
-  name: "example",
-  predef: false
-});
-
-t.demo();
-
 // send it out there
-module.exports = {
-  Tag: Tag
-}
+module.exports = Tag;
