@@ -1,7 +1,7 @@
 // excellent.js
 var app_info = {
-	name: "MEAN Wreed",
-	version: "0.3.0"
+	name: "mrburns",
+	version: "0"
 };
 
 // app includes
@@ -15,7 +15,7 @@ var database = "test";
 var db = require("./config/db")(database);
 
 // set the port to listen on
-var port = 8787;
+var port = 1337;
 
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + "/public")); 
