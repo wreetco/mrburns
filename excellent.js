@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var methodOverride = require("method-override");
 var fs = require('fs');
+var log = require('./lib/wlog.js');
 
 // app information
 var app_info = {
