@@ -4,6 +4,7 @@ var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
 var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
+var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
 
 module.exports = function(app) {
 // example model route
@@ -61,5 +62,14 @@ app.get('/user', function(req, res) {
 // end get /user
 // end user actions
 
+/*
+  * Reminder actions
+*/
+// GET /reminder
+app.get('/reminder', function(req, res) {
+  res.send(ReminderCtrl.demo());
+});
+// end get /reminder
+// end reminder actions
 
 };
