@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 
 var user_schema = mongoose.Schema({
+	created_date: {type: Date, default: Date.now},
 	email: String,
 	password: String,
 	roles: [],

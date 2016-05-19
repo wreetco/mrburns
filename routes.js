@@ -5,6 +5,7 @@ var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
 var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
+var SessionCtrl = require("./app/controllers/session_ctrl.js");
 
 module.exports = function(app) {
   // example model route
