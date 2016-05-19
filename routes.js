@@ -62,8 +62,9 @@ module.exports = function(app) {
   // end get /user
   // POST /user
   app.post('/user', function(req, res) {
+		console.log('hit user post');
     res.send(UserCtrl.new(req));
-  }
+  });
   // end post /user
   // end user actions
 
