@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
-module.exports = function(db) {
-	mongoose.connect('mongodb://localhost/' + db, {}, function(err) {
+module.exports = function(db, pwd) {
+	mongoose.connect('mongodb://mrburns:'+pwd+'@db.ioblog.xyz/' + db, {}, function(err) {
 		if (err)	{
 			console.log("[!] Database error: " + err);	
 		}
@@ -10,3 +10,5 @@ module.exports = function(db) {
 		}
 	});
 };
+
+

@@ -14,8 +14,9 @@ var app_info = {
 };
 
 // database setup
-var database = "test";
-var db = require("./config/db")(database);
+var database = "mrburns_v1";
+var pwd = process.env.MRBURNSDB;
+var db = require("./config/db")(database, pwd);
 
 // set the port to listen on
 var port = 1337;
