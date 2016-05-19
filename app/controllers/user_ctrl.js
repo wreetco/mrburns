@@ -9,7 +9,20 @@ var UserCtrl = {
       managers: [{instance_of: "manager"}]
     });
     return u;
+  },
+
+  new: function(req) {
+    var email = req.params.email;
+    var passwd = req.params.passwd;
+    // validate the deals
+
+    var u = User({
+      email: email,
+      password: passwd
+    });
+    return u;
   }
+
 };
 
 exports.UserCtrl = UserCtrl;

@@ -56,10 +56,15 @@ module.exports = function(app) {
     * User actions
   */
   // GET /user
-  app.get('/user', function(req, res) {
+  app.get('/user/:user_id', function(req, res) {
     res.send(UserCtrl.demo());
   });
   // end get /user
+  // POST /user
+  app.post('/user', function(req, res) {
+    res.send(UserCtrl.new(req));
+  }
+  // end post /user
   // end user actions
 
   /*
