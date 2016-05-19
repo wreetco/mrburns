@@ -12,8 +12,8 @@ var UserCtrl = {
   },
 
   new: function(req) {
-    var email = req.params.email;
-    var passwd = req.params.passwd;
+    var email = req.body.email;
+    var passwd = req.body.passwd;
     // validate the deals
 
     var u = User({

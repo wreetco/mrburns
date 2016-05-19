@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var mongoose = require("mongoose");
 var methodOverride = require("method-override");
+var bodyParser = require("body-parser");
 var fs = require("fs");
 var Wlog = require("./lib/wlog.js");
 var Wregx = require("./lib/wregx.js");
@@ -27,6 +28,10 @@ db.on('open', function() {
 
 // set the port to listen on
 var port = 1337;
+
+// parser
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // routes
 require("./routes")(app); // include route handlers
