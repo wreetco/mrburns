@@ -3,6 +3,7 @@
 // app includes
 var express = require("express");
 var app = express();
+var mongoose = require("mongoose");
 var methodOverride = require("method-override");
 var fs = require('fs');
 var Wlog = require('./lib/wlog.js');
@@ -16,7 +17,12 @@ var app_info = {
 // database setup
 var database = "mrburns_v1";
 var pwd = process.env.MRBURNSDB;
-var db = require("./config/db")(database, pwd);
+mongoose.connect("mongodb://mrburns:"+pwd+"@db.ioblog.xyz/"+database+"?authdb=admin");
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, '[!] connection error:'));
+db.on('open', function() {
+	console.log('[+] connected to remote db');
+});
 
 // set the port to listen on
 var port = 1337;
