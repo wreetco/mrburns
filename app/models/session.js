@@ -1,10 +1,12 @@
 var mongoose = require("mongoose");
 var uuid = require("uuid");
 
+var Schema = mongoose.Schema;
+
 var session_schema = mongoose.Schema({
   expires: {type: Date, default: Date.now() + (7*24*60*60*1000)},// let's try default one week
 	token: {type: String, default: uuid.v4()},
-	user: {}
+	user: {type: Schema.ObjectId, ref: 'User'}
 }, {
   timestamps: {
     createdAt: "created_date",
