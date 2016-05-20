@@ -1,4 +1,3 @@
-var examples = require('./app/controllers/example.js');
 var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
 var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
@@ -8,11 +7,6 @@ var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
 var SessionCtrl = require("./app/controllers/session_ctrl.js");
 
 module.exports = function(app) {
-  // example model route
-  app.get('/example/show', function(req, res) {
-    examples.show(req, res);
-  });
-
   /*
     * Session fuckshit
   */
