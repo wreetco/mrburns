@@ -16,7 +16,7 @@ user_schema.methods.demo = function() {
 user_schema.methods.hashPassword = function(passwd) {
   // we'll use created_date for salt, more entropy might be nice but
   // that should be good enough, a unique val is what's really important
-  return crypto.createHash("sha1").update(passwd + this.created_date).digest('hex');
+  return crypto.createHash("sha1").update(passwd + this.created_date + process.env.WREETSALT).digest('hex');
 };
 
 
