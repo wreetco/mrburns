@@ -52,4 +52,5 @@ setTimeout(function() {
 
 
 // expose app
-exports = module.exports = app;
+//exports = module.exports = app;
+exports.Wlog = Wlog;

@@ -14,6 +14,16 @@ module.exports = function(app) {
   });
 
   /*
+    * Session fuckshit
+  */
+  // GET /auth (session)
+  app.post('/auth', function(req, res) {
+    //res.send(UserCtrl.login(req));
+		UserCtrl.login(req, res);
+  });
+  // end get /auth
+
+  /*
     * Account actions
   */
   // GET /account
