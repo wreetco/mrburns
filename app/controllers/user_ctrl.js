@@ -34,9 +34,9 @@ var UserCtrl = {
   login: function(req, res) {
     // some basic safety checks
     if (!Wregx.isEmail(req.body.email))
-      throw Errors.invalidEmail;
+      res.send(Errors.invalidEmail());
     if (!Wregx.injSafe(req.body.passwd))
-      throw Errors.notSafe;
+      res.send(Errors.notSafe());
     // otherwise we're cool to move forward
     var u = User();
     u.email = req.body.email;
