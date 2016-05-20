@@ -4,6 +4,11 @@ var tag_schema = mongoose.Schema({
   name: String,
   predef: Boolean,
   sticky: {type: String, default: ""}
+}, {
+  timestamps: {
+    createdAt: "created_date",
+    updatedAt: "updated_at"
+  }
 });
 
 tag_schema.methods.demo = function() {
