@@ -30,4 +30,5 @@ db.on('open', function() {
 	replServer.context.SessionCtrl = SessionCtrl;
 	// modesl for direct use, won't be provided by controller
 	replServer.context.User = require("./app/models/user.js");	
+	replServer.context.Role = require("./app/models/role.js");
 });
