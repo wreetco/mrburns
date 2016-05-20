@@ -1,9 +1,11 @@
 var mongoose = require("mongoose");
 
+var Schema = mongoose.Schema;
+
 var account_schema = mongoose.Schema({
 	billing: String,
 	managers: [],
-  users: []
+  users: [{type: Schema.ObjectId, ref: 'Course'}]
 }, {
   timestamps: {
     createdAt: "created_date",
