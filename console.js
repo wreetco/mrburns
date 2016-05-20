@@ -28,4 +28,6 @@ db.on('open', function() {
 	replServer.context.UserCtrl = UserCtrl;
 	replServer.context.ReminderCtrl = ReminderCtrl;
 	replServer.context.SessionCtrl = SessionCtrl;
+	// modesl for direct use, won't be provided by controller
+	replServer.context.User = require("./app/models/user.js");	
 });
