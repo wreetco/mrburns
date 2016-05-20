@@ -1,8 +1,12 @@
+// wreetco libs
 var Errors = require('./../../lib/errors');
 var Wlog = require('./../../lib/wlog');
 var Wregx = require('./../../lib/wregx');
-
+// required models
 var User = require("./../models/user");
+// supporting controllers
+var SessionCtrl = require("./session_ctrl");
+
 
 var UserCtrl = {
   demo: function() {
@@ -40,8 +44,13 @@ var UserCtrl = {
       if (user) {
         u.created_date = user.created_date;
         // see if the password matches
-        if (u.hashPassword(req.body.passwd) == user.password)
-          res.send(user);
+        if (u.hashPassword(req.body.passwd) == user.password) {
+          // looks good, let's get this dude a session
+          res.send({
+            user: u,
+            session: SessionCtrl.new()
+          });
+        }
       }
       // either email or pass was wrong if exec falls out to this line
       res.send({error: Errors.loginError});
