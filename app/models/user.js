@@ -3,11 +3,14 @@ var crypto = require("crypto");
 var q = require("q");
 
 var user_schema = mongoose.Schema({
-	created_date: {type: Date, default: Date.now},
 	email: String,
 	password: String,
-	roles: [],
-	managers: []
+	roles: []
+}, {
+  timestamps: {
+    createdAt: "created_date",
+    updatedAt: "updated_at"
+  }
 });
 
 user_schema.methods.demo = function() {

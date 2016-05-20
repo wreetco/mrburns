@@ -1,10 +1,14 @@
 var mongoose = require("mongoose");
 
 var account_schema = mongoose.Schema({
-	email: String,
-	password: String,
 	billing: String,
-	managers: []
+	managers: [],
+  users: []
+}, {
+  timestamps: {
+    createdAt: "created_date",
+    updatedAt: "updated_at"
+  }
 });
 
 account_schema.methods.demo = function() {
