@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var account_schema = mongoose.Schema({
 	billing: String,
-	managers: [],
+	managers: [{type: Schema.ObjectId, ref: 'Manager'}],
   users: [{type: Schema.ObjectId, ref: 'Course'}]
 }, {
   timestamps: {

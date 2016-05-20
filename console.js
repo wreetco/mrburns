@@ -29,7 +29,8 @@ db.on('open', function() {
 	replServer.context.ReminderCtrl = ReminderCtrl;
 	replServer.context.SessionCtrl = SessionCtrl;
 	// modesl for direct use, won't be provided by controller
-	replServer.context.Account = require("./app/models/account.js");
-	replServer.context.User = require("./app/models/user.js");	
-	replServer.context.Role = require("./app/models/role.js");
+	replServer.context.Account = require("./app/models/account");
+	replServer.context.Manager = require("./app/models/manager");
+	replServer.context.User = require("./app/models/user");	
+	replServer.context.Role = require("./app/models/role");
 });
