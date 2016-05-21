@@ -31,6 +31,7 @@ db.on('open', function() {
 	// modesl for direct use, won't be provided by controller
 	replServer.context.Account = require("./app/models/account");
 	replServer.context.Manager = require("./app/models/manager");
+	replServer.context.Contact = require("./app/models/contact");
 	replServer.context.User = require("./app/models/user");	
 	replServer.context.Role = require("./app/models/role");
 });
