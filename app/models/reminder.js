@@ -5,6 +5,11 @@ var reminder_schema = mongoose.Schema({
   event_time: Date,
   target: String,
   pcollection: String
+}, {
+  timestamps: {
+    createdAt: "created_date",
+    updatedAt: "updated_at"
+  }
 });
 
 reminder_schema.methods.demo = function() {

@@ -2,9 +2,12 @@ var mongoose = require("mongoose");
 var crypto = require("crypto");
 var q = require("q");
 
+var Schema = mongoose.Schema;
+
 var user_schema = mongoose.Schema({
 	email: String,
 	password: String,
+  account: {type: Schema.ObjectId, ref: 'Account'},
 	roles: []
 }, {
   timestamps: {

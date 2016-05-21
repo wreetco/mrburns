@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var tag_schema = mongoose.Schema({
   name: String,
-  predef: Boolean,
+  predef: {type: Boolean, default: false},
   sticky: {type: String, default: ""}
 }, {
   timestamps: {

@@ -32,6 +32,7 @@ db.on('open', function() {
 	replServer.context.Account = require("./app/models/account");
 	replServer.context.Manager = require("./app/models/manager");
 	replServer.context.Contact = require("./app/models/contact");
+	replServer.context.Tag = require("./app/models/tag");
 	replServer.context.User = require("./app/models/user");	
 	replServer.context.Role = require("./app/models/role");
 });
