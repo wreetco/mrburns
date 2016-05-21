@@ -44,7 +44,12 @@ module.exports = function(app) {
   app.get('/contact', function(req, res) {
     res.send(ContactCtrl.demo());
   });
-  // end get /contact
+  //end get /contact
+  // POST /contact
+  app.post('/contact', function(req, res) {
+
+  });
+  // end post /contact
   // end contact actions
 
   /*
