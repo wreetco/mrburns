@@ -7,7 +7,7 @@ var manager_schema = mongoose.Schema({
   account: {type: Schema.ObjectId, ref: 'Account'},
   modules: {type: Schema.ObjectId, ref: 'Module'},
   contacts: [{type: Schema.ObjectId, ref: 'Contact'}],
-  users: {type: Schema.ObjectId, ref: 'User'},
+  users: [{type: Schema.ObjectId, ref: 'User'}],
   custom_fields: {type: Schema.ObjectId, ref: 'Field'},
 }, {
   timestamps: {
