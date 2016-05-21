@@ -8,7 +8,7 @@ var user_schema = mongoose.Schema({
 	email: String,
 	password: String,
   account: {type: Schema.ObjectId, ref: 'Account'},
-	roles: []
+	roles: [{type: Schema.ObjectId, ref: 'Role'}]
 }, {
   timestamps: {
     createdAt: "created_date",
