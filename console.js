@@ -1,10 +1,10 @@
 var repl = require("repl");
 
 var mongoose = require("mongoose");
-
+var AppCtrl = require("./app/controllers/application_ctrl");
 var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
-var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
+var RecordCtrl = require("./app/controllers/record_ctrl");
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
 var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
@@ -21,18 +21,22 @@ db.on('open', function() {
 		prompt: "mrburns> "
 	});
 	// controllers
+	replServer.context.AppCtrl = AppCtrl;
 	replServer.context.AccountCtrl = AccountCtrl;
 	replServer.context.TagCtrl = TagCtrl;
-	replServer.context.ContactCtrl = ContactCtrl;
+	replServer.context.RecordCtrl = RecordCtrl;
 	replServer.context.FieldCtrl = FieldCtrl;
 	replServer.context.UserCtrl = UserCtrl;
 	replServer.context.ReminderCtrl = ReminderCtrl;
 	replServer.context.SessionCtrl = SessionCtrl;
 	// modesl for direct use, won't be provided by controller
+	replServer.context.Module = require("./app/models/module");
 	replServer.context.Account = require("./app/models/account");
 	replServer.context.Manager = require("./app/models/manager");
-	replServer.context.Contact = require("./app/models/contact");
+	replServer.context.Record = require("./app/models/record");
+	replServer.context.Field = require("./app/models/field");
 	replServer.context.Tag = require("./app/models/tag");
 	replServer.context.User = require("./app/models/user");	
+	replServer.context.Session = require("./app/models/session");
 	replServer.context.Role = require("./app/models/role");
 });

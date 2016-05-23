@@ -1,12 +1,10 @@
+/*
+	TODO: perhaps save the user's avail managers at session create
+			* in order to speed manager lookup narrowed by smaller session lookup
+*/
 var Session = require("./../models/session.js");
 
 var SessionCtrl = {
-  demo: function() {
-    return Session({
-      user: {'email': 'lol@attack.com'}
-    });
-  }, // end demo
-
   new: function() {
     var s = Session({});
     return s;
@@ -20,6 +18,7 @@ var SessionCtrl = {
     sess.user = user;
     sess.save();
   } // end save
+
 
 };
 

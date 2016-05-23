@@ -6,7 +6,7 @@ var manager_schema = mongoose.Schema({
   organization: String,
   account: {type: Schema.ObjectId, ref: 'Account'},
   modules: [{type: Schema.ObjectId, ref: 'Module'}],
-  contacts: [{type: Schema.ObjectId, ref: 'Contact'}],
+  records: [{type: Schema.ObjectId, ref: 'Record'}],
   users: [{type: Schema.ObjectId, ref: 'User'}],
   custom_fields: [{type: Schema.ObjectId, ref: 'Field'}],
 }, {

@@ -2,12 +2,8 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var contact_schema = mongoose.Schema({
-  organization: String,
-  first_name: String,
-  last_name: String,
-  phone_num: String,
-  email: String,
+var record_schema = mongoose.Schema({
+  x: {}, // flexfield all in their face
   manager: {type: Schema.ObjectId, ref: 'Manager'},
   tags: [{type: Schema.ObjectId, ref: 'Tag'}]
 }, {
@@ -17,12 +13,12 @@ var contact_schema = mongoose.Schema({
   }
 });
 
-contact_schema.methods.demo = function() {
+record_schema.methods.demo = function() {
   console.log(this);
 }
 
-var Contact = mongoose.model('Contact', contact_schema);
+var Record = mongoose.model('Record', record_schema);
 
 
 // export it
-module.exports = Contact;
+module.exports = Record;

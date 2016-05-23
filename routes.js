@@ -1,6 +1,9 @@
+var Errors = require("./lib/errors");
+
+var AppCtrl = require("./app/controllers/application_ctrl");
 var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
-var ContactCtrl = require("./app/controllers/contact_ctrl.js").ContactCtrl;
+var RecordCtrl = require("./app/controllers/record_ctrl");
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
 var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
@@ -17,6 +20,12 @@ module.exports = function(app) {
   });
   // end get /auth
 
+  // anything above the app.all can be accessed with no auth key
+  app.all("*", function(req, res, next) {
+    AppCtrl.isAuthd(req.body.key, next);
+  });
+  // anything below the app.all will first check for a valid auth token before performing its action
+
   /*
     * Account actions
   */
@@ -28,6 +37,26 @@ module.exports = function(app) {
   // end account actions
 
   /*
+    * Manager actions
+  */
+  // GET /managers
+  app.get('/managers', function(req, res) {
+    // sup brad
+  });
+  // end get /managers
+  // end manager actions
+
+  /*
+    * Record actions
+  */
+  // POST /
+  app.post('/record', function(req, res) {
+    RecordCtrl.new(req, res);
+  });
+  // end post /record
+  // end record actions
+
+  /*
     * Tag actions
   */
   // GET /tag
@@ -36,21 +65,6 @@ module.exports = function(app) {
   });
   // end get /tag
   // end tag actions
-
-  /*
-    * Contact actions
-  */
-  // GET /contact
-  app.get('/contact', function(req, res) {
-    res.send(ContactCtrl.demo());
-  });
-  //end get /contact
-  // POST /contact
-  app.post('/contact', function(req, res) {
-
-  });
-  // end post /contact
-  // end contact actions
 
   /*
     * Field actions
@@ -86,5 +100,14 @@ module.exports = function(app) {
   });
   // end get /reminder
   // end reminder actions
+
+  // errors
+  app.use(function(err, req, res, next){
+    if(err instanceof Error){
+      if(err.message === '401'){
+        res.send(Errors.unauthorized());
+      }
+    }
+  });
 
 };

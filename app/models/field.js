@@ -1,9 +1,10 @@
 var mongoose = require("mongoose");
 
 var field_schema = mongoose.Schema({
-  section: String,
-  name: String,
-  db_name: String,
+  tab: {type: String, default: ""},
+  section: {type: String, default: ""},
+  name: {type: String, default: ""},
+  db_name: {type: String, default: ""},
   type: String,
   visibility: String,
   order: Number
