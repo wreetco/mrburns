@@ -21,7 +21,7 @@ var RecordCtrl = {
       // safe and that the user attached to this token has permission to work there
       function(callback) {
         var m = Manager();
-        m.getById(req.body.manager).then(function(m) {
+        m.getById(req.body.manager, 'modules').then(function(m) {
           if (m)
             callback(null, m);
           else
@@ -36,17 +36,27 @@ var RecordCtrl = {
         else // we good
           callback(null, m);
       },
-      function(r, callback) {
+      function(m, callback) {
         // so if we're cool with it then let's build this object
-        var rec = req.body.record;
-
+        var r = {};
+        var in_r = req.body.record;
+        // get a list of approved fields for this record
+        var fields = m.fields();
+        // iterating only what the user gives us gives us a chance to save on passes
+        for (k in in_r)
+          if (fields.indexOf(k) != -1)
+            r[k] = in_r[k];
+        r.lol = "for sure this was after processing";
         // if we're about done here...
-        callback(null, rec);
+        callback(null, r);
       }
     ], function(e, r) {
       // end of the line
-      if (e)
+      if (e) // kill us off if we had an error somewhere
         res.send(e);
+      // basically we're cool here. pass the r to the deal and save it
+      r = Record({x: r});
+      //r.save();
       res.send(r);
     });
     // if the data looks good let's put it on a record
