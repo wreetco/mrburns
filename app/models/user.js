@@ -17,8 +17,9 @@ var user_schema = mongoose.Schema({
   }
 });
 
-user_schema.methods.demo = function() {
-  console.log(this);
+user_schema.methods.new = function() {
+  // add a new user to the database
+
 };
 
 user_schema.methods.hashPassword = function(passwd) {

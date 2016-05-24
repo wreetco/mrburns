@@ -2,7 +2,7 @@ var Errors = require("./lib/errors");
 
 var AppCtrl = require("./app/controllers/application_ctrl");
 var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
-var TagCtrl = require("./app/controllers/tag_ctrl.js").TagCtrl;
+var TagCtrl = require("./app/controllers/tag_ctrl");
 var RecordCtrl = require("./app/controllers/record_ctrl");
 var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
 var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
@@ -64,6 +64,11 @@ module.exports = function(app) {
     res.send(TagCtrl.demo());
   });
   // end get /tag
+  // POST /tag
+  app.post('/tag', function(req, res) {
+    TagCtrl.new(req, res);
+  });
+  // end post /tag
   // end tag actions
 
   /*

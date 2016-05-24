@@ -46,7 +46,6 @@ var RecordCtrl = {
         for (k in in_r)
           if (fields.indexOf(k) != -1)
             r[k] = in_r[k];
-        r.lol = "for sure this was after processing";
         // if we're about done here...
         callback(null, r);
       }
@@ -54,7 +53,7 @@ var RecordCtrl = {
       // end of the line
       if (e) // kill us off if we had an error somewhere
         res.send(e);
-      // basically we're cool here. pass the r to the deal and save it
+      // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
       //r.save();
       res.send(r);
