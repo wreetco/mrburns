@@ -23,9 +23,8 @@ session_schema.methods.getById = function(sess) {
     d.resolve(false);
   // it's probably coo
   Session.findById(sess, function(e, session) {
-    if (session) {
+    if (session)
       d.resolve(session);
-    }
     else
       d.resolve(false);
   });

@@ -1,3 +1,5 @@
+var q = require("q");
+var Wregx = require("../../lib/wregx");
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
@@ -16,9 +18,21 @@ var manager_schema = mongoose.Schema({
   }
 });
 
-manager_schema.methods.demo = function() {
-  console.log(this);
-}
+manager_schema.methods.getById = function(mid) {
+  // grab a manager by id for malevolent use
+  var d = q.defer();
+  // first make sure it is not evil
+  if (!Wregx.isHexstr(mid))
+    d.resolve(false);
+  // it's probably coo
+  Manager.findById(mid, function(e, manager) {
+    if (manager)
+      d.resolve(manager);
+    else
+      d.resolve(false);
+  });
+  return d.promise;
+};
 
 var Manager = mongoose.model('Manager', manager_schema);
 

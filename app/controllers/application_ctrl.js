@@ -6,12 +6,14 @@
 var Session = require("./../models/session");
 
 var Homer = {
-  isAuthd(sess, next) {
+  isAuthd(sess, req, next) {
     // check if they have a valid session
     var s = Session();
     s.getById(sess).then(function(session) {
-      if (session)
+      if (session) {
+        req.session = session;
         next();
+      }
       else
         next(new Error(401));
     });

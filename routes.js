@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   // anything above the app.all can be accessed with no auth key
   app.all("*", function(req, res, next) {
-    AppCtrl.isAuthd(req.body.key, next);
+    AppCtrl.isAuthd(req.body.key, req, next);
   });
   // anything below the app.all will first check for a valid auth token before performing its action
 
