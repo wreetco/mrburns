@@ -15,6 +15,9 @@ var RecordCtrl = {
     /*
       post a new record to the db
     */
+    /*new Record.new(req.body.record, req.body.manager).then(function(r) {
+      // add it, then
+    });*/
     // we will want to verify each field the user requested is allowed and safe
     async.waterfall([
       // first collect the manager ID the record will belong to, make sure it is
@@ -58,12 +61,6 @@ var RecordCtrl = {
       //r.save();
       res.send(r);
     });
-    // if the data looks good let's put it on a record
-    // get a new record
-
-    // assign the record's fields to our user JSON
-
-    // save the object and resolve the promise
   } // end new method
 };
 

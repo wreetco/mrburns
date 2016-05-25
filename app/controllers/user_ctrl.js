@@ -19,16 +19,14 @@ var UserCtrl = {
     return u;
   },
 
-  new: function(req) {
-    var email = req.body.email;
-    var passwd = req.body.passwd;
-    // validate the deals
-
-    var u = User({
-      email: email,
-      password: passwd
+  new: function(req, res) {
+    console.log('in userctrl.new');
+    new User().new(req.body.user).then(function(r) {
+      // see what we get
+      res.send(r);
+    }, function(e) {
+      res.send(e);
     });
-    return u;
   }, // end new
 
   login: function(req, res) {
@@ -40,7 +38,7 @@ var UserCtrl = {
     if (!Wregx.injSafe(req.body.passwd))
       return res.send(Errors.notSafe());
     // otherwise we're cool to move forward
-    var u = User();
+    var u = new User();
     u.email = req.body.email;
     u.getByEmail().then(function(user) {
       if (user) {

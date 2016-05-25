@@ -20,6 +20,8 @@ db.on('open', function() {
 	replServer = repl.start({ 
 		prompt: "mrburns> "
 	});
+	// libs
+	replServer.context.Wregx = require("./lib/wregx");
 	// controllers
 	replServer.context.AppCtrl = AppCtrl;
 	replServer.context.AccountCtrl = AccountCtrl;

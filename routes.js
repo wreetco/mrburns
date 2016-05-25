@@ -91,7 +91,7 @@ module.exports = function(app) {
   // end get /user
   // POST /user
   app.post('/user', function(req, res) {
-    res.send(UserCtrl.new(req));
+    UserCtrl.new(req, res);
   });
   // end post /user
   // end user actions
