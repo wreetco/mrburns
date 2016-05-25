@@ -1,13 +1,15 @@
 var Errors = require("./lib/errors");
 
 var AppCtrl = require("./app/controllers/application_ctrl");
-var AccountCtrl = require("./app/controllers/account_ctrl.js").AccountCtrl;
+var AccountCtrl = require("./app/controllers/account_ctrl").AccountCtrl;
 var TagCtrl = require("./app/controllers/tag_ctrl");
 var RecordCtrl = require("./app/controllers/record_ctrl");
-var FieldCtrl = require("./app/controllers/field_ctrl.js").FieldCtrl;
-var UserCtrl = require("./app/controllers/user_ctrl.js").UserCtrl;
-var ReminderCtrl = require("./app/controllers/reminder_ctrl.js").ReminderCtrl;
-var SessionCtrl = require("./app/controllers/session_ctrl.js");
+var FieldCtrl = require("./app/controllers/field_ctrl").FieldCtrl;
+var UserCtrl = require("./app/controllers/user_ctrl").UserCtrl;
+var ReminderCtrl = require("./app/controllers/reminder_ctrl").ReminderCtrl;
+var SessionCtrl = require("./app/controllers/session_ctrl");
+var ManagerCtrl = require("./app/controllers/manager_ctrl");
+
 
 module.exports = function(app) {
   /*
@@ -44,6 +46,10 @@ module.exports = function(app) {
     // sup brad
   });
   // end get /managers
+  // POST /manager
+  app.post('/manager', function(req, res) {
+    ManagerCtrl.new(req, res);
+  });
   // end manager actions
 
   /*
