@@ -6,6 +6,7 @@ var mongoose = require("mongoose");
 
 var Module = require("./module");
 var Account = require("./account");
+var Field = require("./field");
 
 var Schema = mongoose.Schema;
 
@@ -15,7 +16,7 @@ var manager_schema = mongoose.Schema({
   modules: [{type: Schema.ObjectId, ref: 'Module'}],
   records: [{type: Schema.ObjectId, ref: 'Record'}],
   users: [{type: Schema.ObjectId, ref: 'User'}],
-  custom_fields: [{type: Schema.ObjectId, ref: 'Field'}],
+  custom_fields: [],
 }, {
   timestamps: {
     createdAt: "created_date",
@@ -68,10 +69,10 @@ manager_schema.methods.new = function(m, user) {
     Account.findById(m.account).then(function(a) {
       console.log('account find cb');
       if (!a)
-        return callback('invalid_account', null);
+        reject('invalid_account');
       // so let's see about this user
       if (a.users.indexOf(user) == -1) // user in acc users arr?
-        return callback('not_authd', null);
+        reject('not_authd');
       // looks like they are allowed to add to this account, so do it
       m.account = a;
       new Manager(m).save().then(function(manager) {
@@ -83,6 +84,29 @@ manager_schema.methods.new = function(m, user) {
     }); // end account lookup
   }); // end promise
 }; // end new method
+
+manager_schema.methods.addField = function(field) {
+  var manager = this;
+  // verify the data, add the field
+  return new Promise(function(resolve, reject) {
+    if (!Wregx.isSafeLabel(field.tab))
+      reject(Errors.notSafe());
+    if (!Wregx.isSafeLabel(field.section))
+      reject(Errors.notSafe());
+    if (!Wregx.isSafeLabel(field.name))
+      reject(Errors.notSafe());
+    if (!Wregx.isSafeName(field.db_name))
+      reject(Errors.notSafe());
+    // aight
+    manager.custom_fields.push(new Field(field));
+    manager.save().then(function(r) {
+      if (r)
+        resolve(r);
+      else
+        reject("save err");
+    });
+  }); // end promise
+};
 
 
 var Manager = mongoose.model('Manager', manager_schema);

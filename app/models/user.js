@@ -12,7 +12,7 @@ var user_schema = mongoose.Schema({
 	email: String,
 	password: String,
   account: {type: Schema.ObjectId, ref: 'Account'},
-  //managers: [{type: Schema.ObjectId, ref: 'Manager'}],
+  managers: [{type: Schema.ObjectId, ref: 'Manager'}],
 	roles: [{type: Schema.ObjectId, ref: 'Role'}]
 }, {
   timestamps: {
@@ -68,6 +68,14 @@ user_schema.methods.getByEmail = function() {
   });
   return d.promise;
 };
+
+user_schema.methods.authdForManager = function(m_id) {
+  // for speed improvements we only take the ID, could change in the future
+  if (this.managers.indexOf(m_id) != -1)
+    return true;
+  else
+    return false;
+}; // end authdForManager method
 
 
 var User = mongoose.model('User', user_schema);

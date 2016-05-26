@@ -50,6 +50,12 @@ module.exports = function(app) {
   app.post('/manager', function(req, res) {
     ManagerCtrl.new(req, res);
   });
+  // end POST /manager
+  // POST /manager/field
+  app.post('/manager/field', function(req, res) {
+    ManagerCtrl.addCustomField(req, res);
+  });
+  // end POST /manager/field
   // end manager actions
 
   /*
