@@ -108,6 +108,60 @@ manager_schema.methods.addField = function(field) {
   }); // end promise
 };
 
+// statics
+
+manager_schema.statics.buildInterface = function(m) {
+  //Manager.findOne({}).populate('modules').then(function(r){Manager.buildInterface(r).then(function(inf){i = inf})})
+  // build the interface for the manager
+  return new Promise(function(resolve, reject) {
+    var interface = {
+      organization: m.organization,
+      tabs: []
+    };
+    this.addField = function(field) {
+      // find the right tab
+      for (var i = 0; i < interface.tabs.length; i++) {
+        if (interface.tabs[i].name == field.tab) {
+          // we have found the right tab, now the section
+          for (var j = 0; j < interface.tabs[i].sections.length; j++) {
+            if (interface.tabs[i].sections[j].name == field.section) {
+              // this is the right section
+              interface.tabs[i].sections[j].fields.push(field);
+              return 1;
+            }
+          }  // end j
+          // if we get out here we have a new section to make
+          interface.tabs[i].sections.push({
+            name: field.section
+          });
+          return 1;
+        }
+      } // end i
+      // we have a tab to add
+      interface.tabs.push({
+        name: field.tab,
+        sections: [{
+          name: field.section,
+          fields: [field]
+        }]
+      });
+      return 1;
+    }; // end addField helper
+
+    // we need to add the fields from all sources
+    for (var i = 0; i < m.custom_fields.length; i++)
+      this.addField(m.custom_fields[i]);
+    // and for the modules, slightly more complex
+    for (var i = 0; i < m.modules.length; i++) {
+      var mod = m.modules[i];
+      for (var j = 0; j < mod.fields.length; j++)
+        this.addField(mod.fields[j]);
+    }
+
+    resolve(interface);
+  }); // end promise
+}; // end builditnerface method
+
 
 var Manager = mongoose.model('Manager', manager_schema);
 
