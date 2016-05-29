@@ -27,7 +27,7 @@ var ManagerCtrl = {
     }).then(function(u) {
       return new Promise(function(resolve, reject) {
         // we found the user
-        if (!u.authdForManager(req.body.manager))
+        if (!User.authdForManager(req.body.manager, u))
           reject(Errors.unauthorized());
         // looks like we're good to move forward
         // get the manager and add the field to it
@@ -62,6 +62,9 @@ var ManagerCtrl = {
     // grab all the records for the manager m_id given options opts
     var m_id = req.body.manager;
     //var opts = req.body.options;
+    // does the user have permission to read this manager
+    if (!User.authdForManager(m_id, req.session.user))
+      return res.send(Errors.unauthorized());
     Manager.getById(m_id, 'records').then(function(m) {
       if (!m)
         return res.send('no matching manager id');

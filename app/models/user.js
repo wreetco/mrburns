@@ -69,14 +69,15 @@ user_schema.methods.getByEmail = function() {
   return d.promise;
 };
 
-user_schema.methods.authdForManager = function(m_id) {
+// statics
+
+user_schema.statics.authdForManager = function(m_id, user) {
   // for speed improvements we only take the ID, could change in the future
-  if (this.managers.indexOf(m_id) != -1)
+  if (user.managers.indexOf(m_id) != -1)
     return true;
   else
     return false;
 }; // end authdForManager method
-
 
 var User = mongoose.model('User', user_schema);
 
