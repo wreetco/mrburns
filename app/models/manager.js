@@ -24,25 +24,6 @@ var manager_schema = mongoose.Schema({
   }
 });
 
-manager_schema.methods.getById = function(m_id, populate) {
-  // grab a manager by id for malevolent use
-  var d = q.defer();
-  // first make sure it is not evil
-  if (!Wregx.isHexstr(m_id))
-    d.resolve(false);
-  if (!Wregx.isAlpha(populate))
-    populate = "";
-  // it's probably coo
-  Manager.findById(m_id).populate(populate).exec(function(e, manager) {
-    if (manager)
-      d.resolve(manager);
-    else
-      d.resolve(false);
-  });
-  d.resolve('dfdssf');
-  return d.promise;
-};
-
 manager_schema.methods.fields = function() {
   // probably pretty expensive, otherwise I would make a isValidField or something
   // generate the json object representation of this beast
@@ -110,8 +91,26 @@ manager_schema.methods.addField = function(field) {
 
 // statics
 
+manager_schema.statics.getById = function(m_id, populate) {
+  // grab a manager by id for malevolent use
+  return new Promise(function(resolve, reject) {
+    // first make sure it is not evil
+    if (!Wregx.isHexstr(m_id))
+      resolve(false);
+    if (!Wregx.isAlpha(populate))
+      populate = "";
+    // it's probably coo
+    Manager.findById(m_id).populate(populate).exec(function(e, manager) {
+      if (manager)
+        resolve(manager);
+      else
+        resolve(false);
+    });
+  }); // end promise
+};
+
 manager_schema.statics.buildInterface = function(m) {
-  //Manager.findOne({}).populate('modules').then(function(r){Manager.buildInterface(r).then(function(inf){i = inf})})
+  // Manager.findOne({}).populate('modules').then(function(r){Manager.buildInterface(r).then(function(inf){i = inf})})
   // build the interface for the manager
   return new Promise(function(resolve, reject) {
     var interface = {
@@ -157,7 +156,7 @@ manager_schema.statics.buildInterface = function(m) {
       for (var j = 0; j < mod.fields.length; j++)
         this.addField(mod.fields[j]);
     }
-
+    // turn the resolve brad
     resolve(interface);
   }); // end promise
 }; // end builditnerface method

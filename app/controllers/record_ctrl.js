@@ -23,8 +23,7 @@ var RecordCtrl = {
       // first collect the manager ID the record will belong to, make sure it is
       // safe and that the user attached to this token has permission to work there
       function(callback) {
-        var m = Manager();
-        m.getById(req.body.manager, 'modules').then(function(m) {
+        Manager.getById(req.body.manager, 'modules').then(function(m) {
           if (m)
             callback(null, m);
           else

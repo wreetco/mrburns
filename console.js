@@ -31,6 +31,7 @@ db.on('open', function() {
 	replServer.context.UserCtrl = UserCtrl;
 	replServer.context.ReminderCtrl = ReminderCtrl;
 	replServer.context.SessionCtrl = SessionCtrl;
+	replServer.context.ManagerCtrl = require("./app/controllers/manager_ctrl.js");
 	// modesl for direct use, won't be provided by controller
 	replServer.context.Module = require("./app/models/module");
 	replServer.context.Account = require("./app/models/account");

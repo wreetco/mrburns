@@ -45,7 +45,12 @@ module.exports = function(app) {
   app.get('/managers', function(req, res) {
     // sup brad
   });
+  // GET /manager/records
   // end get /managers
+  app.get('/manager/records', function(req, res) {
+
+  });
+  // end get /manager/records
   // POST /manager
   app.post('/manager', function(req, res) {
     ManagerCtrl.new(req, res);

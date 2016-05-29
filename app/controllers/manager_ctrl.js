@@ -58,6 +58,25 @@ var ManagerCtrl = {
     });
   }, // end addCustomField
 
+  getRecords: function(req, res) {
+    // grab all the records for the manager m_id given options opts
+    var m_id = req.body.manager;
+    //var opts = req.body.options;
+    Manager.getById(m_id, 'records').then(function(m) {
+      if (!m)
+        return res.send('no matching manager id');
+      // otherwise brad those manager records back
+      return res.send(m.records);
+    });
+  } // end getRecords method
+
 };
 
 module.exports = ManagerCtrl;
+
+
+
+
+
+
+
