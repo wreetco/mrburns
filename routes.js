@@ -24,7 +24,7 @@ module.exports = function(app) {
 
   // anything above the app.all can be accessed with no auth key
   app.all("*", function(req, res, next) {
-    AppCtrl.isAuthd(req.body.key, req, next);
+    AppCtrl.isAuthd(req, next);
   });
   // anything below the app.all will first check for a valid auth token before performing its action
 
@@ -44,11 +44,12 @@ module.exports = function(app) {
   // GET /managers
   app.get('/managers', function(req, res) {
     // sup brad
+    console.log('get /managers');
   });
   // GET /manager/records
   // end get /managers
-  app.get('/manager/records', function(req, res) {
-
+  app.get('/manager/:m_id/records', function(req, res) {
+    ManagerCtrl.getRecords(req, res);
   });
   // end get /manager/records
   // POST /manager

@@ -6,10 +6,11 @@
 var Session = require("./../models/session");
 
 var Homer = {
-  isAuthd(sess, req, next) {
+  isAuthd: function(req, next) {
     // check if they have a valid session
-    var s = Session();
-    s.getById(sess).then(function(session) {
+    // use the session key from the Auth header
+    var sess = req.get('Authorization');
+    Session.getById(sess).then(function(session) {
       if (session) {
         req.session = session;
         next();

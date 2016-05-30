@@ -60,7 +60,7 @@ var ManagerCtrl = {
 
   getRecords: function(req, res) {
     // grab all the records for the manager m_id given options opts
-    var m_id = req.body.manager;
+    var m_id = req.params.m_id;
     //var opts = req.body.options;
     // does the user have permission to read this manager
     if (!User.authdForManager(m_id, req.session.user))

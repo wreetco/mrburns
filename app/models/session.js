@@ -14,15 +14,16 @@ var session_schema = mongoose.Schema({
   }
 });
 
+// statics
 
-session_schema.methods.getById = function(sess) {
+session_schema.statics.getById = function(sess) {
   // grab a session by id for malevolent use
   var d = q.defer();
   // first make sure it is not evil
   if (!Wregx.isHexstr(sess))
     d.resolve(false);
   // it's probably coo
-  Session.findById(sess, function(e, session) {
+  Session.findById(sess).populate('user').then(function(session) {
     if (session)
       d.resolve(session);
     else
