@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var record_schema = mongoose.Schema({
-  x: {}, // flexfield all in their face
+  x: Schema.Types.Mixed, // flexfield all in their face
   manager: {type: Schema.ObjectId, ref: 'Manager'},
   tags: [{type: Schema.ObjectId, ref: 'Tag'}]
 }, {
@@ -15,7 +15,7 @@ var record_schema = mongoose.Schema({
 
 record_schema.methods.demo = function() {
   console.log(this);
-}
+};
 
 var Record = mongoose.model('Record', record_schema);
 
