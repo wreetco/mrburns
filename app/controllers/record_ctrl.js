@@ -101,7 +101,10 @@ var RecordCtrl = {
       // final record after the shit
       // save it
       record.save().then(function(r) {
-        res.send(r);
+        if (r)
+          res.send(r);
+        else
+          res.send("unable to save tags to record");
       });
     });
   } // end addTag method
