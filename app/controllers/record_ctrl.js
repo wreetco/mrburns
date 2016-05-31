@@ -73,31 +73,27 @@ var RecordCtrl = {
       return res.send(Errors.invalidId());
     // let's check the ID
     Record.getById(req.body.record, '').then(function(record) {
-
       return new Promise(function(resolve, reject) {
-
-      // tags already in the DB should be clean, let's just verify they are indeed that
-      for (var i = 0; i < req.body.tags.length; i++) {
-        (function (t_id, i) { // ignore lint error, what am I gonna do, name it and break it out? psh
-          // skip a bad id
-          if (!Wregx.isHexstr(t_id))
-            return;
-          // otherwise run the check
-          Tag.getById(t_id).then(function(tag) {
-            // seems like the tag exists, add it to the record
-            record.tags.push(tag);
-            if (i == req.body.tags.length -1)
-              resolve(record);
-          }, function(e) {
-            // failed
-            console.log(e);
-            return;
-          });
-        })(req.body.tags[i], i);
-      } // end tag iteration
-
+        // tags already in the DB should be clean, let's just verify they are indeed that
+        for (var i = 0; i < req.body.tags.length; i++) {
+          (function (t_id, i) { // ignore lint error, what am I gonna do, name it and break it out? psh
+            // skip a bad id
+            if (!Wregx.isHexstr(t_id))
+              return;
+            // otherwise run the check
+            Tag.getById(t_id).then(function(tag) {
+              // seems like the tag exists, add it to the record
+              record.tags.push(tag);
+              if (i == req.body.tags.length -1)
+                resolve(record);
+            }, function(e) {
+              // failed
+              console.log(e);
+              return;
+            });
+          })(req.body.tags[i], i);
+        } // end tag iteration
       }); // end promise
-
     }, function(e) {
       // rebbradcted
       res.send(e);
@@ -110,7 +106,7 @@ var RecordCtrl = {
     });
   } // end addTag method
 
-};
+}; // end RecordCtrl
 
 module.exports = RecordCtrl;
 
