@@ -35,6 +35,10 @@ manager_schema.methods.fields = function() {
       fields.push(m.fields[j].db_name);
     // end inner field iteration
   } // end module iteration
+  // there is also the matter of custom fields
+  for (i = 0; i < this.custom_fields.length; i++)
+    fields.push(this.custom_fields[i].db_name);
+  // good to go
   return fields;
 };
 

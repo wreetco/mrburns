@@ -17,10 +17,10 @@ var RecordCtrl = {
     /*
       post a new record to the db
     */
-    /*new Record.new(req.body.record, req.body.manager).then(function(r) {
-      // add it, then
-    });*/
     // we will want to verify each field the user requested is allowed and safe
+    // easy first thing to check, is the provided manager id good
+    if (!Wregx.isHexstr(req.body.manager))
+      return res.send(Errors.invalidId());
     async.waterfall([
       // first collect the manager ID the record will belong to, make sure it is
       // safe and that the user attached to this token has permission to work there
@@ -35,8 +35,8 @@ var RecordCtrl = {
       // take a look at it
       function(m, callback) {
         // essentially if this user does not appear in m.users he is not allowed
-        if (m.users.indexOf(req.session.user) == -1)
-          callback("user not authorized on this manager", null);
+        if (m.users.indexOf(req.session.user.id) == -1)
+          callback(Errors.unauthorized(), null);
         else // we good
           callback(null, m);
       },
@@ -59,8 +59,12 @@ var RecordCtrl = {
         res.send(e);
       // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
-      r.save();
-      res.send(r);
+      r.save().then(function(record) {
+        if (record)
+          res.send(record);
+        else
+          res.send(Errors.saveError());
+      });
     });
   }, // end new method
 
@@ -104,7 +108,7 @@ var RecordCtrl = {
         if (r)
           res.send(r);
         else
-          res.send("unable to save tags to record");
+          res.send(Errors.saveError());
       });
     });
   } // end addTag method
