@@ -1,5 +1,8 @@
 var q = require("q");
-var Wregx = require("../../lib/wregx");
+
+var Wregx = require("./../../lib/wregx");
+var Errors = require("./../../lib/errors");
+
 var mongoose = require("mongoose");
 
 var tag_schema = mongoose.Schema({
@@ -32,6 +35,24 @@ tag_schema.methods.new = function(t) {
   });
   return d.promise;
 };
+
+// statics
+
+tag_schema.statics.getById = function(t_id) {
+  // grab a tag by id for malevolent use
+  return new Promise(function(resolve, reject) {
+    // first make sure it is not evil
+    if (!Wregx.isHexstr(t_id))
+      reject(Errors.invalidId());
+    // it's probably coo
+    Tag.findById(t_id).populate('').then(function(tag) {
+      if (tag)
+        resolve(tag);
+      else
+        reject(Errors.invalidId());
+    });
+  }); // end promise
+}; // end getById method
 
 var Tag = mongoose.model('Tag', tag_schema);
 

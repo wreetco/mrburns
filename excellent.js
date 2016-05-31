@@ -30,6 +30,9 @@ db.on('open', function() {
 // set the port to listen on
 var port = 1337;
 
+// disable x-powered-by header
+app.disable('x-powered-by');
+
 // parser
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies

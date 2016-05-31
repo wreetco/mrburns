@@ -72,6 +72,12 @@ module.exports = function(app) {
     RecordCtrl.new(req, res);
   });
   // end post /record
+  // POST /record/tag
+  app.post('/record/tag', function(req, res) {
+    // push tag into record's tag array
+    RecordCtrl.addTags(req, res);
+  });
+  // end post /record/tag
   // end record actions
 
   /*
