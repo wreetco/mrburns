@@ -42,7 +42,7 @@ manager_schema.methods.fields = function() {
   return fields;
 };
 
-manager_schema.methods.new = function(m, user) {
+manager_schema.methods.new = function(m, user.id) {
   return new Promise(function(resolve, reject) {
     // make sure the organization is good
     if (!Wregx.isSafeName(m.organization))
@@ -56,7 +56,7 @@ manager_schema.methods.new = function(m, user) {
       if (!a)
         reject('invalid_account');
       // so let's see about this user
-      if (a.users.indexOf(user) == -1) // user in acc users arr?
+      if (a.users.indexOf(user.id) == -1) // user in acc users arr?
         reject('not_authd');
       // looks like they are allowed to add to this account, so do it
       m.account = a;
