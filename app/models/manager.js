@@ -46,15 +46,15 @@ manager_schema.methods.new = function(m, user) {
   return new Promise(function(resolve, reject) {
     // make sure the organization is good
     if (!Wregx.isSafeName(m.organization))
-      reject('bad_name');
+      return reject('bad_name');
     // and that the account id exists and belongs to them
     if (!Wregx.isHexstr(m.account))
-      reject('bad_id');
+      return reject('bad_id');
     // adding a manager is serious shit, is this user allowed to? let's find out
     Account.findById(m.account).then(function(a) {
       console.log('account find cb');
       if (!a)
-        reject('invalid_account');
+       return reject('invalid_account');
       // so let's see about this user
       if (a.users.indexOf(user.id) == -1) // user in acc users arr?
         reject('not_authd');
