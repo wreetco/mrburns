@@ -1,5 +1,6 @@
-var q = require("q");
 var Wregx = require("../../lib/wregx");
+var Errors = require("../../lib/errors");
+
 var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
@@ -16,20 +17,20 @@ var session_schema = mongoose.Schema({
 
 // statics
 
-session_schema.statics.getById = function(sess) {
+session_schema.statics.getById = function(s_id) {
   // grab a session by id for malevolent use
-  var d = q.defer();
-  // first make sure it is not evil
-  if (!Wregx.isHexstr(sess))
-    d.resolve(false);
-  // it's probably coo
-  Session.findById(sess).populate('user').then(function(session) {
-    if (session)
-      d.resolve(session);
-    else
-      d.resolve(false);
-  });
-  return d.promise;
+  return new Promise(function(resolve, reject) {
+    // first make sure it is not evil
+    if (!Wregx.isHexstr(s_id))
+      reject(Errors.sessError());
+    // it's probably coo
+    Session.findById(s_id).populate('user').then(function(session) {
+      if (session && Date() < session.expires)
+        resolve(session);
+      else
+        reject(Errors.sessError());
+    });
+  }); // end promise
 };
 
 var Session = mongoose.model('Session', session_schema);

@@ -15,8 +15,9 @@ var Homer = {
         req.session = session;
         next();
       }
-      else
-        next(new Error(401));
+    }, function(e) {
+      // rejected
+      next(new Error(401));
     });
   } // end isAuthd method
 };
