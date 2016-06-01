@@ -42,7 +42,7 @@ manager_schema.methods.fields = function() {
   return fields;
 };
 
-manager_schema.methods.new = function(m, user.id) {
+manager_schema.methods.new = function(m, user) {
   return new Promise(function(resolve, reject) {
     // make sure the organization is good
     if (!Wregx.isSafeName(m.organization))
