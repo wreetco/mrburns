@@ -1,5 +1,3 @@
-var q = require("q");
-
 var Wregx = require("./../../lib/wregx");
 var Errors = require("./../../lib/errors");
 
@@ -21,20 +19,32 @@ tag_schema.methods.demo = function() {
 };
 
 tag_schema.methods.new = function(t) {
+  // new Tag().new({name:"wret"}).then(function(r){t = r}).catch(function(err){e = err})
   // let's verify and add this new one
-  var d = q.defer();
-  if (!Wregx.isSafeName(t.name)) {
-    d.resolve(false);
-    return d.promise;
-  }
-  // or
-  var tag = new Tag();
-  tag.name = t.name;
-  tag.save().then(function(r) {
-    d.resolve(r);
-  });
-  return d.promise;
-};
+  return new Promise(function(resolve, reject) {
+    if (!Wregx.isSafeName(t.name))
+      return reject(Errors.notSafe());
+    // check if the tag is already defined
+    Tag.find({name:t.name}).then(function(tag) {
+      if (tag.length !== 0)
+        return tag[0];
+      else
+        return false;
+    }).then(function(tag) {
+      if (tag)
+        return resolve(tag); // already exists
+      // save it
+      new Tag(t).save().then(function(tag) {
+        if (tag)
+          resolve(tag);
+        else
+          throw "did not save";
+      });
+    }).catch(function(e) {
+      reject(Error.saveError());
+    });
+  }); // end promise
+}; // end new tag
 
 // statics
 
