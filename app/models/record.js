@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 
 var record_schema = mongoose.Schema({
   x: Schema.Types.Mixed, // flexfield all in their face
+  archetype: {type: Schema.ObjectId, ref: 'Archetype'},
   manager: {type: Schema.ObjectId, ref: 'Manager'},
   tags: [{type: Schema.ObjectId, ref: 'Tag'}]
 }, {
