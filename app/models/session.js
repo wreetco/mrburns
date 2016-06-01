@@ -22,13 +22,13 @@ session_schema.statics.getById = function(s_id) {
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
     if (!Wregx.isHexstr(s_id))
-      reject(Errors.sessError());
+      reject(Errors.loginError());
     // it's probably coo
     Session.findById(s_id).populate('user').then(function(session) {
-      if (session && Date() < session.expires)
+      if (session && (Date.now() < session.expires.getTime()))
         resolve(session);
       else
-        reject(Errors.sessError());
+        reject(Errors.loginError());
     });
   }); // end promise
 };
