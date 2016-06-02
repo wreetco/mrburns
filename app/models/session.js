@@ -29,6 +29,8 @@ session_schema.statics.getById = function(s_id) {
         resolve(session);
       else
         reject(Errors.loginError());
+    }).catch(function(e) {
+      reject(Errors.loginError());
     });
   }); // end promise
 };
