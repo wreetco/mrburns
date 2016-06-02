@@ -10,9 +10,6 @@ var field_schema = mongoose.Schema({
   order: Number
 });
 
-field_schema.methods.demo = function() {
-  console.log(this);
-}
 
 var Field = mongoose.model('Field', field_schema);
 

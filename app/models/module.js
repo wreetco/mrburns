@@ -1,10 +1,12 @@
 var mongoose = require("mongoose");
 var uuid = require("uuid");
 
+var Field = require("./field");
+
 var Schema = mongoose.Schema;
 
 var module_schema = mongoose.Schema({
-  fields: [],
+  fields: [Field.schema],
   tabs: [],
   name: {type: String, default: ""},
   description: {type: String, default: ""},

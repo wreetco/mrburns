@@ -17,7 +17,7 @@ var manager_schema = mongoose.Schema({
   modules: [{type: Schema.ObjectId, ref: 'Module'}],
   records: [{type: Schema.ObjectId, ref: 'Record'}],
   users: [{type: Schema.ObjectId, ref: 'User'}],
-  custom_fields: [],
+  custom_fields: [Field.schema]
 }, {
   timestamps: {
     createdAt: "created_date",
