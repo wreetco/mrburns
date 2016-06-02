@@ -7,7 +7,7 @@ var ManagerCtrl = {
   new: function(req, res) {
     new Manager().new(req.body.manager, req.session.user).then(function(m) {
       res.send(m);
-    }, function(e) {
+    }).catch(function(e) {
       res.send(e);
     });
   }, // end new manager

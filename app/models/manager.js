@@ -2,6 +2,7 @@ var async = require("async");
 
 var q = require("q");
 var Wregx = require("../../lib/wregx");
+var Errors = require("../../lib/errors");
 var mongoose = require("mongoose");
 
 var Module = require("./module");
@@ -43,28 +44,46 @@ manager_schema.methods.fields = function() {
 };
 
 manager_schema.methods.new = function(m, user) {
+  // User.findById('573e589432178b732c4b9a0d').then(function(user){u = user})
+  // new Manager().new({organization:"wreetco",account:"573f7c8c8f8894643e3ad8b0"},u).then(function(r){m = r}).catch(function(err){e = err})
   return new Promise(function(resolve, reject) {
     // make sure the organization is good
     if (!Wregx.isSafeName(m.organization))
-      return reject('bad_name');
+      return reject(Errors.notSafe());
     // and that the account id exists and belongs to them
     if (!Wregx.isHexstr(m.account))
-      return reject('bad_id');
+      return reject(Errors.invalidId());
     // adding a manager is serious shit, is this user allowed to? let's find out
     Account.findById(m.account).then(function(a) {
-      console.log('account find cb');
       if (!a)
        return reject('invalid_account');
       // so let's see about this user
       if (a.users.indexOf(user.id) == -1) // user in acc users arr?
-        reject('not_authd');
-      // looks like they are allowed to add to this account, so do it
+        return reject(Errors.unauthorized());
+      // looks like they are allowed to add to this account, set the ref
       m.account = a;
-      new Manager(m).save().then(function(manager) {
-        if (manager)
-          resolve(manager);
-        else
-          reject('not_saved');
+      return m;
+    }).then(function(m) {
+      // does account exist already?
+      Manager.find({organization:m.organization}).then(function(res) {
+        if (res.length !== 0) {
+          resolve(res);
+          return false;
+        }
+        // otherwise pass to save
+        return m;
+      }).then(function(m) {
+        if (!m)
+          return;
+        // save it
+        new Manager(m).save().then(function(manager) {
+          if (manager)
+            resolve(manager);
+          else
+            reject(Errors.saveError());
+        }).catch(function(e) {
+          reject(e);
+        });
       });
     }); // end account lookup
   }); // end promise
