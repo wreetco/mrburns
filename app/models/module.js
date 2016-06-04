@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 var module_schema = mongoose.Schema({
   fields: [Field.schema],
-  tabs: [],
+  tabs: [String],
   name: {type: String, default: ""},
   description: {type: String, default: ""},
   settings: {},

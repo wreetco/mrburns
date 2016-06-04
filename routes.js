@@ -9,6 +9,7 @@ var UserCtrl = require("./app/controllers/user_ctrl").UserCtrl;
 var ReminderCtrl = require("./app/controllers/reminder_ctrl").ReminderCtrl;
 var SessionCtrl = require("./app/controllers/session_ctrl");
 var ManagerCtrl = require("./app/controllers/manager_ctrl");
+var EmailCtrl = require("./app/controllers/email_ctrl");
 
 
 module.exports = function(app) {
@@ -21,6 +22,16 @@ module.exports = function(app) {
 		UserCtrl.login(req, res);
   });
   // end get /auth
+
+  /*
+    * no-auth email actions
+  */
+  // GET /t.gif
+  app.get('/t.gif', function(req, res) {
+    EmailCtrl.markRead(req, res);
+  });
+  // end get /t.gif
+  // end email actions
 
   // anything above the app.all can be accessed with no auth key
   app.all("*", function(req, res, next) {

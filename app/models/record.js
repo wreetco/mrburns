@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var record_schema = mongoose.Schema({
   x: Schema.Types.Mixed, // flexfield all in their face
   archetype: {type: Schema.ObjectId, ref: 'Archetype'},
-  manager: {type: Schema.ObjectId, ref: 'Manager'},
+  manager: {type: Schema.ObjectId, required: true, ref: 'Manager'},
   tags: [{type: Schema.ObjectId, ref: 'Tag'}]
 }, {
   timestamps: {
@@ -21,6 +21,7 @@ var record_schema = mongoose.Schema({
 
 record_schema.statics.getById = function(r_id, populate) {
   // grab a record by id for malevolent use
+  populate = populate || "";
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
     if (!Wregx.isHexstr(r_id))

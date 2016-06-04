@@ -20,7 +20,7 @@ var app_info = {
 // database setup
 var database = "mrburns_v1";
 var pwd = process.env.MRBURNSDB;
-mongoose.connect("mongodb://mrburns:"+pwd+"@db.ioblog.xyz/"+database+"?authdb=admin");
+mongoose.connect("mongodb://mrburns:"+pwd+"@db.wreet.xyz/"+database+"?authdb=admin");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '[!] connection error:'));
 db.on('open', function() {

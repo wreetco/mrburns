@@ -6,8 +6,8 @@ var Wregx = require("./../../lib/wregx");
 var Schema = mongoose.Schema;
 
 var archetype_schema = mongoose.Schema({
-  name: String,
-  oddities: Schema.Types.Mixed
+  name: {type: String, required: true},
+  oddities: {type: {}, default: {}}
 }, {
   timestamps: {
     createdAt: "created_date",

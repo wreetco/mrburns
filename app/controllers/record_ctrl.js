@@ -47,16 +47,45 @@ var RecordCtrl = {
         // get a list of approved fields for this record
         var fields = m.fields();
         // iterating only what the user gives us gives us a chance to save on passes
-        for (k in in_r)
-          if (fields.indexOf(k) != -1)
-            r[k] = in_r[k];
+        for (k in in_r) {
+          // check each key, must exists and have valid data
+          for (var i = 0; i < fields.length; i++) {
+            if (fields[i].db_name == k) {
+              // we found it, verify type
+              switch (fields[i].type) {
+                case "string":
+                  // customer string
+                  if (!Wregx.allowedStr(in_r[k]))
+                    callback(Errors.notSafe(), null);
+                  break;
+                case "int":
+                  // customer int
+                  if (!Wregx.isNum(in_r[k]))
+                    callback(Errors.notSafe(), null);
+                  break;
+                case "date":
+                  // customer date
+                  if (!Wregx.isDate())
+                    callback(Errors.notSafe(), null);
+                  break;
+                default:
+                  // fields require (valid) types, so we have a fucking problem
+                  callback(Errors.notSafe(), null);
+              }
+              // if we're through with all that the field must match its type
+              r[k] = in_r[k];
+              // next key
+              break;
+            }
+          } // end field lookup loop
+        } // end in_r key it
         // if we're about done here...
         callback(null, r);
       }
     ], function(e, r) {
       // end of the line
       if (e) // kill us off if we had an error somewhere
-        res.send(e);
+        return res.send(e);
       // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
       r.save().then(function(record) {

@@ -1,6 +1,3 @@
-var async = require("async");
-
-var q = require("q");
 var Wregx = require("../../lib/wregx");
 var Errors = require("../../lib/errors");
 var mongoose = require("mongoose");
@@ -33,12 +30,12 @@ manager_schema.methods.fields = function() {
   for (var i = 0; i < this.modules.length; i++) {
     var m = this.modules[i];
     for (var j = 0; j < m.fields.length; j++)
-      fields.push(m.fields[j].db_name);
+      fields.push(m.fields[j]);
     // end inner field iteration
   } // end module iteration
   // there is also the matter of custom fields
   for (i = 0; i < this.custom_fields.length; i++)
-    fields.push(this.custom_fields[i].db_name);
+    fields.push(this.custom_fields[i]);
   // good to go
   return fields;
 };

@@ -12,7 +12,7 @@ var SessionCtrl = require("./app/controllers/session_ctrl.js");
 
 var database = "mrburns_v1";
 var pwd = process.env.MRBURNSDB;
-mongoose.connect("mongodb://mrburns:"+pwd+"@db.ioblog.xyz/"+database+"?authdb=admin");
+mongoose.connect("mongodb://mrburns:"+pwd+"@db.wreet.xyz/"+database+"?authdb=admin");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '[!] connection error:'));
 db.on('open', function() {
@@ -42,4 +42,5 @@ db.on('open', function() {
 	replServer.context.User = require("./app/models/user");	
 	replServer.context.Session = require("./app/models/session");
 	replServer.context.Role = require("./app/models/role");
+	replServer.context.Archetype = require("./app/models/archetype");
 });
