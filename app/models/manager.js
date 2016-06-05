@@ -1,5 +1,7 @@
 var Wregx = require("../../lib/wregx");
 var Errors = require("../../lib/errors");
+var Wlog = require("../../lib/wlog");
+
 var mongoose = require("mongoose");
 
 var Module = require("./module");
@@ -45,8 +47,10 @@ manager_schema.methods.new = function(m, user) {
   // new Manager().new({organization:"wreetco",account:"573f7c8c8f8894643e3ad8b0"},u).then(function(r){m = r}).catch(function(err){e = err})
   return new Promise(function(resolve, reject) {
     // make sure the organization is good
-    if (!Wregx.isSafeName(m.organization))
+    if (!Wregx.isSafeName(m.organization)) {
+      Wlog.log("rejected unsafe organization name: " + m.organization, "security");
       return reject(Errors.notSafe());
+    }
     // and that the account id exists and belongs to them
     if (!Wregx.isHexstr(m.account))
       return reject(Errors.invalidId());
@@ -90,14 +94,22 @@ manager_schema.methods.addField = function(field) {
   var manager = this;
   // verify the data, add the field
   return new Promise(function(resolve, reject) {
-    if (!Wregx.isSafeLabel(field.tab))
-      reject(Errors.notSafe());
-    if (!Wregx.isSafeLabel(field.section))
-      reject(Errors.notSafe());
-    if (!Wregx.isSafeLabel(field.name))
-      reject(Errors.notSafe());
-    if (!Wregx.isSafeName(field.db_name))
-      reject(Errors.notSafe());
+    if (!Wregx.isSafeLabel(field.tab)) {
+      Wlog.log("rejected unsafe field tab name: " + field.tab, "security");
+      return reject(Errors.notSafe());
+    }
+    if (!Wregx.isSafeLabel(field.section)) {
+      Wlog.log("rejected unsafe field section name: " + field.section, "security");
+      return reject(Errors.notSafe());
+    }
+    if (!Wregx.isSafeLabel(field.name)) {
+      Wlog.log("rejected unsafe field label name: " + field.name, "security");
+      return reject(Errors.notSafe());
+    }
+    if (!Wregx.isSafeName(field.db_name)) {
+      Wlog.log("rejected unsafe field db name: " + field.db_name, "security");
+      return reject(Errors.notSafe());
+    }
     // aight
     manager.custom_fields.push(new Field(field));
     manager.save().then(function(r) {
@@ -116,7 +128,7 @@ manager_schema.statics.getById = function(m_id, populate) {
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
     if (!Wregx.isHexstr(m_id))
-      resolve(false);
+      return resolve(false);
     if (!Wregx.isAlpha(populate))
       populate = "";
     // it's probably coo

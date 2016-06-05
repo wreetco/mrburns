@@ -62,7 +62,7 @@ var ManagerCtrl = {
     var m_id = req.params.m_id;
     // make sure it is safe
     if (!Wregx.isHexstr(m_id))
-      return next(Errors.notSafe());
+      return next(Errors.invalidId());
     // does the user have permission to read this manager
     if (!User.authdForManager(m_id, req.session.user))
       return next(Errors.unauthorized());

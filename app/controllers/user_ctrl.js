@@ -36,8 +36,10 @@ var UserCtrl = {
       return next(Errors.missingParams());
     if (!Wregx.isEmail(req.body.email))
       return next(Errors.invalidEmail());
-    if (!Wregx.injSafe(req.body.passwd))
+    if (!Wregx.injSafe(req.body.passwd)) {
+      Wlog.log("rejected suspicious password '" + req.body.password + "' for user " + req.body.email, "security");
       return next(Errors.notSafe());
+    }
     // otherwise we're cool to move forward
     var u = new User();
     u.email = req.body.email;
@@ -54,7 +56,11 @@ var UserCtrl = {
         }
       }
       // either email or pass was wrong if exec falls out to this line
-      next(Erors.loginError());
+      throw Erors.loginError();
+    }).catch(function(e) {
+      // we only catch a bad login, so log that
+      Wlog.log("rejected login attempt for user " + req.body.email, "security");
+      next(e);
     });
   } // end login
 

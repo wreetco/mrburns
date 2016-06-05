@@ -1,5 +1,6 @@
 var Wregx = require("./../../lib/wregx");
 var Errors = require("./../../lib/errors");
+var Wlog = require("../../lib/wlog");
 
 var mongoose = require("mongoose");
 
@@ -22,8 +23,11 @@ tag_schema.methods.new = function(t) {
   // new Tag().new({name:"wret"}).then(function(r){t = r}).catch(function(err){e = err})
   // let's verify and add this new one
   return new Promise(function(resolve, reject) {
-    if (!Wregx.isSafeName(t.name))
+    if (!Wregx.isSafeName(t.name)) {
+      // log and reject
+      Wlog.log("rejected unsafe tag name: " + t.name, "security");
       return reject(Errors.notSafe());
+    }
     // check if the tag is already defined
     Tag.find({name:t.name}).then(function(tag) {
       if (tag.length !== 0)

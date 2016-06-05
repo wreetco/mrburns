@@ -1,5 +1,6 @@
 var Wregx = require("../../lib/wregx");
 var Errors = require("../../lib/errors");
+var Wlog = require('./../../lib/wlog');
 
 var mongoose = require("mongoose");
 
@@ -21,8 +22,10 @@ session_schema.statics.getById = function(s_id) {
   // grab a session by id for malevolent use
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
-    if (!Wregx.isHexstr(s_id))
-      reject(Errors.loginError());
+    if (!Wregx.isHexstr(s_id)) {
+      Wlog.log("caught invalid hex str in auth header", "security");
+      return reject(Errors.loginError());
+    }
     // it's probably coo
     Session.findById(s_id).populate('user').then(function(session) {
       if (session && (Date.now() < session.expires.getTime()))
