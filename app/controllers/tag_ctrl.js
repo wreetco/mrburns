@@ -11,13 +11,15 @@ var TagCtrl = {
     return t;
   },
 
-  new: function(req, res) {
+  new: function(req, res, next) {
     // add a new tag to the db
     new Tag().new(req.body.tag).then(function(r) {
       // see what's good
       if (!r)
-        res.send(Errors.notSafe());
+        throw Errors.saveError();
       res.send(r);
+    }).catch(function(e) {
+      next(e);
     });
   } // end new method
 };

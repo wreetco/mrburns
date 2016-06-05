@@ -1,6 +1,7 @@
 var async = require("async");
 
 var Wregx = require("./../../lib/wregx");
+var Wlog = require("./../../lib/wlog");
 var Errors = require("./../../lib/errors");
 
 var Record = require("./../models/record");
@@ -13,14 +14,14 @@ var RecordCtrl = {
     return c;
   },
 
-  new: function(req, res) {
+  new: function(req, res, next) {
     /*
       post a new record to the db
     */
     // we will want to verify each field the user requested is allowed and safe
     // easy first thing to check, is the provided manager id good
     if (!Wregx.isHexstr(req.body.manager))
-      return res.send(Errors.invalidId());
+      return next(Errors.invalidId());
     async.waterfall([
       // first collect the manager ID the record will belong to, make sure it is
       // safe and that the user attached to this token has permission to work there
@@ -29,7 +30,7 @@ var RecordCtrl = {
           if (m)
             callback(null, m);
           else
-            callback("invalid manager", null);
+            callback(Errors.invalidId(), null);
         });
       },
       // take a look at it
@@ -85,25 +86,25 @@ var RecordCtrl = {
     ], function(e, r) {
       // end of the line
       if (e) // kill us off if we had an error somewhere
-        return res.send(e);
+        return next(e);
       // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
       r.save().then(function(record) {
         if (record)
           res.send(record);
         else
-          res.send(Errors.saveError());
+          next(Errors.saveError());
       });
     });
   }, // end new method
 
-  addTags: function(req, res) {
+  addTags: function(req, res, next) {
     // add one or more tags to a record. tags should come in as a list of t_ids
     // because we already retrieved and created tags as needed while user defined
     // them on the front end
     // first though, does the specified record live in a manager this user is on
     if (!Wregx.isHexstr(req.body.record))
-      return res.send(Errors.invalidId());
+      return next(Errors.invalidId());
     // let's check the ID
     Record.getById(req.body.record, '').then(function(record) {
       return new Promise(function(resolve, reject) {
@@ -112,24 +113,24 @@ var RecordCtrl = {
           (function (t_id, i) { // ignore lint error, what am I gonna do, name it and break it out? psh
             // skip a bad id
             if (!Wregx.isHexstr(t_id))
-              return;
+              throw Errors.invalidId();
             // otherwise run the check
             Tag.getById(t_id).then(function(tag) {
               // seems like the tag exists, add it to the record
               record.tags.push(tag);
               if (i == req.body.tags.length -1)
                 resolve(record);
-            }, function(e) {
+            }).catch(function(e) {
               // failed
-              console.log(e);
-              return;
+              throw e;
             });
           })(req.body.tags[i], i);
         } // end tag iteration
       }); // end promise
-    }, function(e) {
+    }).catch(function(e) {
       // rebbradcted
-      res.send(e);
+      Wlog.log(e, "error");
+      return next(Errors.saveError());
     }).then(function(record) {
       // final record after the shit
       // save it
@@ -137,7 +138,7 @@ var RecordCtrl = {
         if (r)
           res.send(r);
         else
-          res.send(Errors.saveError());
+          next(Errors.saveError());
       });
     });
   } // end addTag method

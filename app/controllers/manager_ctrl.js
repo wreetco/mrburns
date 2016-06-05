@@ -12,7 +12,7 @@ var ManagerCtrl = {
     });
   }, // end new manager
 
-  addCustomField: function(req, res) {
+  addCustomField: function(req, res, next) {
     // add a new custom field to a manager instance
     User.findById(req.session.user).then(function(u) {
       return new Promise(function(resolve, reject) {
@@ -23,16 +23,15 @@ var ManagerCtrl = {
       }); // end promise
     }, function(e) {
       // rejected!
-      res.send(e);
+      //res.send(e);
+      next(e);
     }).then(function(u) {
       return new Promise(function(resolve, reject) {
         // we found the user
         if (!User.authdForManager(req.body.manager, u))
-          reject(Errors.unauthorized());
+          return reject(Errors.unauthorized());
         // looks like we're good to move forward
         // get the manager and add the field to it
-        if (!Wregx.isHexstr(req.body.manager))
-          reject(Errors.notSafe());
         // we coo
         Manager.findById(req.body.manager).then(function(m) {
           // what it brad
@@ -44,32 +43,33 @@ var ManagerCtrl = {
             resolve(updated_manager);
           }, function(e) {
             // probably some sort of DB save issue
-            reject(e);
+            return reject(e);
           });
         });
       }); // end promise
     }, function(e) {
       // rejected
-      res.send(e);
+      next(e);
     }).then(function(manager) {
       res.send(manager);
     }, function(e) {
-      res.send(e);
+      next(e);
     });
   }, // end addCustomField
 
-  getRecords: function(req, res) {
+  getRecords: function(req, res, next) {
     // grab all the records for the manager m_id given options opts
     var m_id = req.params.m_id;
-    //var opts = req.body.options;
+    // make sure it is safe
+    if (!Wregx.isHexstr(m_id))
+      return next(Errors.notSafe());
     // does the user have permission to read this manager
     if (!User.authdForManager(m_id, req.session.user))
-      return res.send(Errors.unauthorized());
+      return next(Errors.unauthorized());
     Manager.getById(m_id, 'records').then(function(m) {
-      if (!m)
-        return res.send('no matching manager id');
-      // otherwise brad those manager records back
       return res.send(m.records);
+    }).catch(function(e) {
+      return next(Errors.noMatch());
     });
   } // end getRecords method
 

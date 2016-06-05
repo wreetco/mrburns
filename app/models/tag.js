@@ -38,10 +38,10 @@ tag_schema.methods.new = function(t) {
         if (tag)
           resolve(tag);
         else
-          throw "did not save";
+          throw Errors.saveError();
       });
     }).catch(function(e) {
-      reject(Error.saveError());
+      reject(e);
     });
   }); // end promise
 }; // end new tag

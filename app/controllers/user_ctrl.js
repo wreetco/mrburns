@@ -19,24 +19,25 @@ var UserCtrl = {
     return u;
   },
 
-  new: function(req, res) {
-    console.log('in userctrl.new');
+  new: function(req, res, next) {
     new User().new(req.body.user).then(function(r) {
       // see what we get
+      if (!r)
+        throw Errors.saveError();
       res.send(r);
-    }, function(e) {
-      res.send(e);
+    }).catch(function(e) {
+      next(e);
     });
   }, // end new
 
-  login: function(req, res) {
+  login: function(req, res, next) {
     // some basic safety checks
     if (!req.body.email || !req.body.passwd)
-      return res.send(Errors.missingParams());
+      return next(Errors.missingParams());
     if (!Wregx.isEmail(req.body.email))
-      return res.send(Errors.invalidEmail());
+      return next(Errors.invalidEmail());
     if (!Wregx.injSafe(req.body.passwd))
-      return res.send(Errors.notSafe());
+      return next(Errors.notSafe());
     // otherwise we're cool to move forward
     var u = new User();
     u.email = req.body.email;
@@ -53,7 +54,7 @@ var UserCtrl = {
         }
       }
       // either email or pass was wrong if exec falls out to this line
-      res.send({error: Errors.loginError});
+      next(Erors.loginError());
     });
   } // end login
 

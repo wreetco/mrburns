@@ -1,7 +1,6 @@
 // shit we need
 var mongoose = require("mongoose");
 var crypto = require("crypto");
-var q = require("q");
 // wreetco libs
 var Errors = require('./../../lib/errors');
 var Wregx = require('./../../lib/wregx');
@@ -27,24 +26,29 @@ user_schema.methods.new = function(u) {
   return new Promise(function(resolve, reject) {
     // first let's clean up the user
     if (!Wregx.isEmail(u.email)) {
-      d.reject(Errors.invalidEmail());
-      return d.promise;
+      return reject(Errors.invalidEmail());
     }
     // really the only things to clean, the process of hashing cleans password up
     // let's make the new user and save it
     // seems this is a place where our created_date hash hurts as and was not so clever
     // as we will have to make two save calls, or race the save, neither great options
     new User(u).save().then(function(user) {
-      // now hash and re-save, sigh
-      user.password = user.hashPassword(u.password);
+      if (!user)
+        throw Errors.saveError();
+      else
+        return user;
+    }).then(function(user) {
+      // do the annoying re-save, sigh
+      user.password = user.hashPassword(u.passwd);
       user.save().then(function(user) {
         resolve(user);
-      }, function(e) {
-        reject(Errors.saveError());
+      }).catch(function(e) {
+        throw Errors.saveError();
       });
-    }, function (e) {
-      reject(Errors.saveError());
+    }).catch(function(e) {
+      reject(e);
     });
+
   }); // end promise
 };
 

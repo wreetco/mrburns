@@ -9,7 +9,7 @@ var record_schema = mongoose.Schema({
   x: Schema.Types.Mixed, // flexfield all in their face
   archetype: {type: Schema.ObjectId, ref: 'Archetype'},
   manager: {type: Schema.ObjectId, required: true, ref: 'Manager'},
-  tags: [{type: Schema.ObjectId, ref: 'Tag'}]
+  tags: [{type: Schema.ObjectId, ref: 'Tag', unique: true}]
 }, {
   timestamps: {
     createdAt: "created_date",

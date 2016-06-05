@@ -5,37 +5,20 @@ var Errors = require("./../../lib/errors");
 
 var Record = require("./../models/record");
 
-/*
-app.get('/t.gif', function (req, res) {
-	// craft a 1x1 transparent tracking pixel
-	eg.sendEmptyGif(req, res, {
-		'Content-Type' : 'image/gif',
-		'Content-Length' : eg.emptyGifBufferLength,
-		'Cache-Control' : 'public, max-age=0'
-	});
-	// store the remote ip
-	var ip = req.connection.remoteAddress;
-	// write that fucker
-	fs.appendFile('ip_list.txt', ip + "\n", function(err) {
-		console.log("[+] Added " + ip + " to the list");
-	});
-});
-*/
-
 var EmailCtrl = {
   sendTrackingPixel: function(req, res) {
     eg.sendEmptyGif(req, res, {
-      'Content-Type' : 'image/gif',
-      'Content-Length' : eg.emptyGifBufferLength,
-      'Cache-Control' : 'public, max-age=0'
+      'Content-Type': 'image/gif',
+      'Content-Length': eg.emptyGifBufferLength,
+      'Cache-Control': 'public, max-age=0'
     });
   }, // end sendTrackingPixel
 
-  markRead: function(req, res) {
+  markRead: function(req, res, next) {
     // the user has GET'd the tracking pixel, log it
     var id = req.query.id;
     if (!Wregx.isHexstr(id))
-      return res.send(Errors.invalidId());
+      return next(Errors.invalidId());
     // errelseug
     Record.getById(id).then(function(r) {
       // good it exists, is it read?
