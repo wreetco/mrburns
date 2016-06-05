@@ -3,6 +3,8 @@
   * basically there are some things that are best left to the big man, homer
 */
 
+var Errors = require("./../../lib/errors");
+
 var Session = require("./../models/session");
 
 var Homer = {
@@ -17,7 +19,7 @@ var Homer = {
       }
     }, function(e) {
       // rejected
-      next(new Error(401));
+      next(Errors.unauthorized());
     });
   } // end isAuthd method
 };
