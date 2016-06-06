@@ -5,7 +5,7 @@ var Wregx = require('./../../lib/wregx');
 // required models
 var User = require("./../models/user");
 // supporting controllers
-var SessionCtrl = require("./session_ctrl");
+var Session = require("./../models/session");
 
 
 var UserCtrl = {
@@ -49,14 +49,14 @@ var UserCtrl = {
         // see if the password matches
         if (u.hashPassword(req.body.passwd) == user.password) {
           // looks good, let's get this dude a session
-          res.send({
-            user: u,
-            session: SessionCtrl.new()
+          Session.new(u).then(function(s) {
+            Wlog.log("created session for " + user.email, "security");
+            return res.send(s);
+          }).catch(function(e){
+            throw Errors.loginError();
           });
         }
       }
-      // either email or pass was wrong if exec falls out to this line
-      throw Erors.loginError();
     }).catch(function(e) {
       // we only catch a bad login, so log that
       Wlog.log("rejected login attempt for user " + req.body.email, "security");

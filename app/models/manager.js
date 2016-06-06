@@ -59,8 +59,10 @@ manager_schema.methods.new = function(m, user) {
       if (!a)
        return reject('invalid_account');
       // so let's see about this user
-      if (a.users.indexOf(user.id) == -1) // user in acc users arr?
+      if (a.users.indexOf(user.id) == -1) { // user in acc users arr?
+        Wlog.log(user.email + " tried to violate AC on account " + a.id, "security");
         return reject(Errors.unauthorized());
+      }
       // looks like they are allowed to add to this account, set the ref
       m.account = a;
       return m;

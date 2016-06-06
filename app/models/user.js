@@ -59,12 +59,13 @@ user_schema.methods.hashPassword = function(passwd) {
 };
 
 user_schema.methods.getByEmail = function() {
+  var user = this;
   return new Promise(function(resolve, reject) {
-    User.findOne({email: this.email}, function(err, u) {
+    User.findOne({email: user.email}).then(function(u) {
       if (u)
         resolve(u);
-      else
-        reject(Errors.noMatch());
+    }).catch(function(e) {
+      reject(Errors.noMatch());
     });
   }); // end promise
 };

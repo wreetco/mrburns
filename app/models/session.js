@@ -38,6 +38,16 @@ session_schema.statics.getById = function(s_id) {
   }); // end promise
 };
 
+session_schema.statics.new = function(user) {
+  return new Promise(function(resolve, reject) {
+    new Session({user: user}).save().then(function(s) {
+      resolve(s);
+    }).catch(function(e) {
+      reject(e);
+    });
+  }); // end promise
+};
+
 var Session = mongoose.model('Session', session_schema);
 
 
