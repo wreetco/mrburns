@@ -40,8 +40,22 @@ session_schema.statics.getById = function(s_id) {
 
 session_schema.statics.new = function(user) {
   return new Promise(function(resolve, reject) {
-    new Session({user: user}).save().then(function(s) {
-      resolve(s);
+    // first, let's not make users another session if they already have one
+    // thing is, sometimes you might want to for more fine-grained control
+    // over a sessions, but we'll save that for another day
+    Session.find({user:user.id}).then(function(s) {
+      if (s.length > 0)
+        return s[0];
+      else
+        return false;
+    }).then(function(s) {
+      if (s)
+        return resolve(s);
+      new Session({user: user}).save().then(function(s) {
+        resolve(s);
+      }).catch(function(e) {
+        throw Errors.saveError();
+      });
     }).catch(function(e) {
       reject(e);
     });
