@@ -71,7 +71,34 @@ var ManagerCtrl = {
     }).catch(function(e) {
       return next(Errors.noMatch());
     });
-  } // end getRecords method
+  }, // end getRecords method
+
+
+  buildInterface: function(req, res, next) {
+    // build the interface for a given manager id
+    var m_id = req.params.m_id;
+    // make sure it is safe
+    if (!Wregx.isHexstr(m_id))
+      return next(Errors.invalidId());
+    // does the user have permission to read this manager
+    if (!User.authdForManager(m_id, req.session.user))
+      return next(Errors.unauthorized());
+    Manager.getById(m_id, 'modules').then(function(m) {
+      if (!m)
+        throw Errors.noMatch();
+      else
+        return m;
+    }).then(function(m) {
+      // get the interface
+      Manager.buildInterface(m).then(function(interface) {
+        res.send(interface);
+      }).catch(function(e) {
+        throw Errors.getError();
+      });
+    }).catch(function(e) {
+      return next(e);
+    });
+  } // end buildInterface method
 
 };
 

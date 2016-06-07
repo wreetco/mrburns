@@ -49,7 +49,7 @@ var UserCtrl = {
         // see if the password matches
         if (u.hashPassword(req.body.passwd) == user.password) {
           // looks good, let's get this dude a session
-          Session.new(u).then(function(s) {
+          Session.new(user).then(function(s) {
             Wlog.log("created session for " + user.email, "security");
             return res.send(s);
           }).catch(function(e){

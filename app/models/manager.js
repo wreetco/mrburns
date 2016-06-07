@@ -130,16 +130,17 @@ manager_schema.statics.getById = function(m_id, populate) {
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
     if (!Wregx.isHexstr(m_id))
-      return resolve(false);
-    if (!Wregx.isAlpha(populate))
-      populate = "";
+      return reject(Errors.notSafe());
     // it's probably coo
-    Manager.findById(m_id).populate(populate).exec(function(e, manager) {
+    Manager.findById(m_id).populate(populate).then(function(manager) {
       if (manager)
         resolve(manager);
       else
-        resolve(false);
+        throw Errors.noMatch();
+    }).catch(function(e) {
+      reject(e);
     });
+
   }); // end promise
 };
 

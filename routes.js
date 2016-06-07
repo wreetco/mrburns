@@ -73,6 +73,11 @@ module.exports = function(app) {
     ManagerCtrl.addCustomField(req, res, next);
   });
   // end POST /manager/field
+  // GET /manager/interface
+  app.get('/manager/:m_id/interface', function(req, res, next) {
+    ManagerCtrl.buildInterface(req, res, next);
+  });
+  // end get /manager/interface
   // end manager actions
 
   /*
