@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-var uuid = require("uuid");
 
 var Field = require("./field");
 
