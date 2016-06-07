@@ -1,11 +1,12 @@
 {
   "name": "mrburns",
-	"version": "0.1.0".
+  "version": "0.1.0",
   "main": "app.js",
   "mean-wreed": "0.3.0",
   "dependencies": {
     "async": "^2.0.0-rc.5",
     "body-parser": "^1.15.1",
+    "cors": "^2.7.1",
     "emptygif": "^0.1.1",
     "express": "~4.13.4",
     "fs": "0.0.2",

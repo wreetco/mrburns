@@ -2,6 +2,7 @@
 
 // app includes
 var express = require("express");
+var cors = require("cors");
 var app = express();
 var mongoose = require("mongoose");
 var methodOverride = require("method-override");
@@ -32,6 +33,9 @@ var port = 1337;
 
 // disable x-powered-by header
 app.disable('x-powered-by');
+
+// cors headers
+app.use(cors());
 
 // parser
 app.use(bodyParser.json()); // support json encoded bodies
