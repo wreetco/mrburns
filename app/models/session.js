@@ -43,7 +43,7 @@ session_schema.statics.new = function(user) {
     // first, let's not make users another session if they already have one
     // thing is, sometimes you might want to for more fine-grained control
     // over a sessions, but we'll save that for another day
-    Session.find({user:user.id}).then(function(s) {
+    Session.find({user:user.id}).populate('user').then(function(s) {
       if (s.length > 0)
         return s[0];
       else
