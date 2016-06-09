@@ -66,7 +66,12 @@ var RecordCtrl = {
                   break;
                 case "date":
                   // customer date
-                  if (!Wregx.isDate())
+                  if (!Wregx.isDate(in_r[k]))
+                    callback(Errors.notSafe(), null);
+                  break;
+                case "email":
+                  // customer date
+                  if (!Wregx.isEmail(in_r[k]))
                     callback(Errors.notSafe(), null);
                   break;
                 default:
@@ -89,6 +94,7 @@ var RecordCtrl = {
         return next(e);
       // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
+      r.manager = req.body.manager;
       r.save().then(function(record) {
         if (record)
           res.send(record);
