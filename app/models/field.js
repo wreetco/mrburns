@@ -1,11 +1,11 @@
 var mongoose = require("mongoose");
 
 var field_schema = mongoose.Schema({
-  tab: {type: String, default: ""},
-  section: {type: String, default: ""},
-  name: {type: String, default: ""},
-  db_name: {type: String, default: ""},
-  type: String,
+  tab: {type: String, required: true},
+  section: {type: String, required: true},
+  name: {type: String, required: true},
+  db_name: {type: String, required: true},
+  type: {type: String, required: true},
   visibility: String,
   order: Number
 });
