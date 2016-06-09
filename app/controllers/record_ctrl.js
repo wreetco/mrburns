@@ -20,6 +20,7 @@ var RecordCtrl = {
     */
     // we will want to verify each field the user requested is allowed and safe
     // easy first thing to check, is the provided manager id good
+    var manager;
     if (!Wregx.isHexstr(req.body.manager))
       return next(Errors.invalidId());
     async.waterfall([
@@ -86,6 +87,7 @@ var RecordCtrl = {
           } // end field lookup loop
         } // end in_r key it
         // if we're about done here...
+        manager = m;
         callback(null, r);
       }
     ], function(e, r) {
@@ -94,7 +96,9 @@ var RecordCtrl = {
         return next(e);
       // basically we're cool here. pass the r to the flexfield and save it
       r = Record({x: r});
-      r.manager = req.body.manager;
+      r.manager = manager._id;
+      manager.records.push(r);
+      manager.save();
       r.save().then(function(record) {
         if (record)
           res.send(record);
