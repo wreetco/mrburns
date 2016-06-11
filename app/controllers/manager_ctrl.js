@@ -66,7 +66,15 @@ var ManagerCtrl = {
     // does the user have permission to read this manager
     if (!User.authdForManager(m_id, req.session.user))
       return next(Errors.unauthorized());
-    Manager.getById(m_id, 'records').then(function(m) {
+    // def population
+    var populate = {
+      path: 'records',
+      populate: {
+        path: 'tags',
+        model: 'Tag'
+      }
+    };
+    Manager.getById(m_id, populate).then(function(m) {
       return res.send(m.records);
     }).catch(function(e) {
       return next(Errors.noMatch());
