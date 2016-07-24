@@ -22,7 +22,6 @@ module.exports = function(app) {
 		UserCtrl.login(req, res, next);
   });
   // end get /auth
-
   /*
     * no-auth email actions
   */
@@ -47,6 +46,11 @@ module.exports = function(app) {
     res.send(AccountCtrl.demo());
   });
   // end get /account
+  // DELETE /auth
+  app.delete('/auth', function(req, res, next) {
+    UserCtrl.logout(req, res, next);
+  }); // end delete /auth
+  // end authz
   // end account actions
 
   /*

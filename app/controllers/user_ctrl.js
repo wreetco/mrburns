@@ -62,7 +62,21 @@ var UserCtrl = {
       Wlog.log("rejected login attempt for user " + req.body.email, "security");
       next(e);
     });
-  } // end login
+  }, // end login
+
+  logout: function(req, res, next) {
+    // delete the session from the collection by ID
+    Session.findById(req.session.id).then(function(s) {
+      // remove it
+      s.remove();
+      return res.send({
+        logged_out: true
+      });
+    }).catch(function(e) {
+      // brad
+      next(Errors.saveError());
+    });
+  } // end logout method
 
 };
 

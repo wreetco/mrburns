@@ -1,6 +1,6 @@
 {
   "name": "mrburns",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "app.js",
   "mean-wreed": "0.3.0",
   "dependencies": {

@@ -12,7 +12,8 @@ var user_schema = mongoose.Schema({
 	password: String,
   account: {type: Schema.ObjectId, ref: 'Account'},
   managers: [{type: Schema.ObjectId, ref: 'Manager'}],
-	roles: [{type: Schema.ObjectId, ref: 'Role'}]
+	roles: [{type: Schema.ObjectId, ref: 'Role'}],
+  settings: {}
 }, {
   timestamps: {
     createdAt: "created_date",
