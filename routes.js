@@ -113,6 +113,11 @@ module.exports = function(app) {
     TagCtrl.new(req, res, next);
   });
   // end post /tag
+  // DELETE tag
+  app.delete('/tag/:t_id', function(req, res, next) {
+    TagCtrl.removeTag(req, res, next); // really just removes the tag ref from that account
+  });
+  // end delete tag
   // end tag actions
 
   /*
