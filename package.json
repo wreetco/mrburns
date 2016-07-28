@@ -1,10 +1,9 @@
 {
   "name": "mrburns",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "app.js",
   "mean-wreed": "0.3.0",
   "dependencies": {
-    "async": "^2.0.0-rc.5",
     "body-parser": "^1.15.1",
     "cors": "^2.7.1",
     "emptygif": "^0.1.1",
