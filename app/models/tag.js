@@ -68,6 +68,55 @@ tag_schema.statics.getById = function(t_id) {
   }); // end promise
 }; // end getById method
 
+tag_schema.statics.getByName = function(tag_str, opts) {
+  // get a tag by name
+  opts = opts || {};
+  return new Promise(function(resolve, reject) {
+    Tag.findOne({name: tag_str}).then(function(tag){
+      if (tag)
+        return resolve(tag);
+      else {
+        if (opts.ins_on_new)
+          return false;
+        else
+          throw Errors.noMatch();
+      }
+    }).then(function(tag) {
+      if (!tag) {
+        // happens to be how we signify this stage should insert the new tag
+        var t = new Tag({name: tag_str});
+        new Tag().new(t).then(function(r) {
+          resolve(r);
+        }).catch(function(err) {
+          throw Errors.saveError();
+        });
+      }
+    }).catch(function(err) {
+      reject(err);
+    });
+  });
+}; // end getByName method
+
+tag_schema.statics.resolveTags = function(tags, ins_on_new) {
+  // take a list of tags and send back a list of them that correspond
+  // it will do both ids and tag strings, adding completely new tags
+  // to the db if needed
+  return new Promise(function(resolve, reject) {
+    var tasks = [];
+    for (var i = 0; i < tags.length; i++) {
+      var t = tags[i];
+      if (Wregx.isHexstr(t))
+        tasks.push(Tag.getById(t));
+      else
+        tasks.push(Tag.getByName(t, {ins_on_new: true}));
+    }
+    Promise.all(tasks).then(function(r) {
+      // r is now a list of tag objs thanks to how promise.all works
+      resolve(r);
+    });
+  });
+}; // end resolveTags function
+
 var Tag = mongoose.model('Tag', tag_schema);
 
 

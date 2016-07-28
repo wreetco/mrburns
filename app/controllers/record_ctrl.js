@@ -5,7 +5,6 @@ var Wlog = require("./../../lib/wlog");
 var Errors = require("./../../lib/errors");
 
 var Record = require("./../models/record");
-var Manager = require("./../models/manager");
 var Tag = require("./../models/tag");
 
 var RecordCtrl = {
@@ -16,95 +15,17 @@ var RecordCtrl = {
 
   new: function(req, res, next) {
     /*
-      post a new record to the db
+      * post a new record to the db
     */
     // we will want to verify each field the user requested is allowed and safe
     // easy first thing to check, is the provided manager id good
-    var manager;
     if (!Wregx.isHexstr(req.body.manager))
       return next(Errors.invalidId());
-    async.waterfall([
-      // first collect the manager ID the record will belong to, make sure it is
-      // safe and that the user attached to this token has permission to work there
-      function(callback) {
-        Manager.getById(req.body.manager, 'modules').then(function(m) {
-          if (m)
-            callback(null, m);
-          else
-            callback(Errors.invalidId(), null);
-        });
-      },
-      // take a look at it
-      function(m, callback) {
-        // essentially if this user does not appear in m.users he is not allowed
-        if (m.users.indexOf(req.session.user.id) == -1)
-          callback(Errors.unauthorized(), null);
-        else // we good
-          callback(null, m);
-      },
-      function(m, callback) {
-        // so if we're cool with it then let's build this object
-        var r = {};
-        var in_r = req.body.record;
-        // get a list of approved fields for this record
-        var fields = m.fields();
-        // iterating only what the user gives us gives us a chance to save on passes
-        for (k in in_r) {
-          // check each key, must exists and have valid data
-          for (var i = 0; i < fields.length; i++) {
-            if (fields[i].db_name == k) {
-              // we found it, verify type
-              switch (fields[i].type) {
-                case "string":
-                  // customer string
-                  if (!Wregx.allowedStr(in_r[k]))
-                    callback(Errors.notSafe(), null);
-                  break;
-                case "int":
-                  // customer int
-                  if (!Wregx.isNum(in_r[k]))
-                    callback(Errors.notSafe(), null);
-                  break;
-                case "date":
-                  // customer date
-                  if (!Wregx.isDate(in_r[k]))
-                    callback(Errors.notSafe(), null);
-                  break;
-                case "email":
-                  // customer date
-                  if (!Wregx.isEmail(in_r[k]))
-                    callback(Errors.notSafe(), null);
-                  break;
-                default:
-                  // fields require (valid) types, so we have a fucking problem
-                  callback(Errors.notSafe(), null);
-              }
-              // if we're through with all that the field must match its type
-              r[k] = in_r[k];
-              // next key
-              break;
-            }
-          } // end field lookup loop
-        } // end in_r key it
-        // if we're about done here...
-        manager = m;
-        callback(null, r);
-      }
-    ], function(e, r) {
-      // end of the line
-      if (e) // kill us off if we had an error somewhere
-        return next(e);
-      // basically we're cool here. pass the r to the flexfield and save it
-      r = Record({x: r});
-      r.manager = manager._id;
-      manager.records.push(r);
-      manager.save();
-      r.save().then(function(record) {
-        if (record)
-          res.send(record);
-        else
-          next(Errors.saveError());
-      });
+    Record.new(req.body.record, req.body.manager, req.session.user).then(function(r) {
+      res.send(r);
+    }).catch(function(err) {
+      // errmergerd
+      next(err);
     });
   }, // end new method
 
