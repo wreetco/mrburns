@@ -56,7 +56,7 @@ record_schema.statics.new = function(record_in, m_id, user) {
         return manager;
     }).then(function(manager) {
       // list of in keys to skip
-      var skip = ["tags"];
+      var skip = ["tags", "id"];
       // let's try and build the final record croduct
       var r = {};
       // get a list of approved fields for this record
@@ -111,7 +111,7 @@ record_schema.statics.new = function(record_in, m_id, user) {
       }
       // if we're about done here...
       m = manager;
-      return Record({x: r}); // pass on a new record with flexfield set
+      return new Record({x: r}); // pass on a new record with flexfield set
     }).then(function(r) {
       return new Promise(function(res, rej) {
         // really the last thing to do is walk the tags, set the refs
@@ -123,10 +123,20 @@ record_schema.statics.new = function(record_in, m_id, user) {
         });
       });
     }).then(function(r) {
+      console.log('record in');
+      console.log(record_in);
+      console.log('----');
+      if (record_in.id && Wregx.isHexstr(record_in.id)) r._id = record_in.id;
       r.manager = m._id;
-      m.records.push(r);
+      if (m.records.indexOf(r._id) === -1) m.records.push(r);
       m.save();
-      r.save().then(function(record) {
+      console.log('record');
+      console.log(r);
+      //r.save().then(function(record) {
+      Record.update({_id: r.id}, r, {
+        upsert: true,
+        setDefaultsOnInsert: true
+      }).then(function(record) {
         if (record)
           resolve(record);
         else
