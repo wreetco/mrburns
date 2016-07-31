@@ -98,6 +98,9 @@ module.exports = function(app) {
     RecordCtrl.addTags(req, res, next);
   });
   // end post /record/tag
+  app.delete('/record/:m_id/:r_id', function(req, res, next) {
+    RecordCtrl.removeRecord(req, res, next);
+  });
   // end record actions
 
   /*

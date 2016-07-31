@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 var Errors = require("./../../lib/errors");
 var Wregx = require("./../../lib/wregx");
 var Tag = require("./tag");
+var User = require("./user");
 var Manager = require("./manager");
 
 var Schema = mongoose.Schema;
@@ -146,6 +147,36 @@ record_schema.statics.new = function(record_in, m_id, user) {
       reject(err);
     }); // end 'the chain'
   }); // end promiseus
+};
+
+// delete a record
+record_schema.statics.delete = function(r_id, m_id, user) {
+  return new Promise(function(resolve, reject) {
+    if (!Wregx.isHexstr(r_id))
+      return reject(Errors.notSafe());
+    if (!User.authdForManager(m_id, user))
+      return reject(Errors.unauthorized()); // user has permission on this manager
+    // is this record owned by the manager?
+    Manager.getById(m_id).then(function(m) {
+      if (m.records.indexOf(r_id) === -1)
+        throw Errors.unauthorized();
+      else
+        return m; // we are authd
+    }).then(function(m) {
+      Record.getById(r_id).then(function(record) {
+        if (!record)
+          throw Errors.invalidId();
+        else
+          return record;
+      }).then(function(record) {
+        record.remove().then(function(res) {
+          resolve(res);
+        });
+      })
+    }).catch(function(err) {
+      reject(err);
+    });
+  }); // end promise
 };
 
 var Record = mongoose.model('Record', record_schema);

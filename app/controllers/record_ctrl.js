@@ -72,7 +72,19 @@ var RecordCtrl = {
           next(Errors.saveError());
       });
     });
-  } // end addTag method
+  }, // end addTag method
+
+  removeRecord: function(req, res, next) {
+    // delete a record from the db
+    Record.delete(req.params.r_id, req.params.m_id, req.session.user).then(function(r) {
+      if (r)
+        res.send({deleted: true});
+      else
+        throw Errors.saveError();
+    }).catch(function(err) {
+      next(err);
+    });
+  } // end removeRecord
 
 }; // end RecordCtrl
 

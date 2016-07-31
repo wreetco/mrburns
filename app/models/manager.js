@@ -127,6 +127,7 @@ manager_schema.methods.addField = function(field) {
 
 manager_schema.statics.getById = function(m_id, populate) {
   // grab a manager by id for malevolent use
+  populate = populate || "";
   return new Promise(function(resolve, reject) {
     // first make sure it is not evil
     if (!Wregx.isHexstr(m_id))
