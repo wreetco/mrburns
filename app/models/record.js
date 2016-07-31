@@ -170,6 +170,7 @@ record_schema.statics.delete = function(r_id, m_id, user) {
           return record;
       }).then(function(record) {
         record.remove().then(function(res) {
+          delete m.records[res.id];
           resolve(res);
         });
       })
