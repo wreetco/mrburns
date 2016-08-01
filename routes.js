@@ -146,6 +146,11 @@ module.exports = function(app) {
     UserCtrl.new(req, res, next);
   });
   // end post /user
+  // POST /user/settings
+  app.post('/user/settings', function(req, res, next) {
+    UserCtrl.modifySettings(req, res, next);
+  });
+  // end post /user/settings
   // end user actions
 
   /*

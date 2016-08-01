@@ -13,7 +13,9 @@ var user_schema = mongoose.Schema({
   account: {type: Schema.ObjectId, ref: 'Account'},
   managers: [{type: Schema.ObjectId, ref: 'Manager'}],
 	roles: [{type: Schema.ObjectId, ref: 'Role'}],
-  settings: {}
+  settings: {
+    theme: ""
+  }
 }, {
   timestamps: {
     createdAt: "created_date",
@@ -70,6 +72,25 @@ user_schema.methods.getByEmail = function() {
     });
   }); // end promise
 };
+
+user_schema.methods.modifySettings = function(settings) {
+  // update the settings object on this user
+  var user = this; // save ref pre-promise, which sucks
+  return new Promise(function(resolve, reject) {
+    // iterate the this.settings keys and take settings from obj
+    for (var k in settings) {
+      if (user.settings[k] && Wregx.isSafeName(settings[k]))
+        user.settings[k] = settings[k];
+    }
+    // save it
+    user.save().then(function(r) {
+      resolve(user.settings);
+    }).catch(function(err) {
+      reject(err);
+      //reject(Errors.saveError());
+    });
+  });
+}; // end modifySettings method
 
 // statics
 

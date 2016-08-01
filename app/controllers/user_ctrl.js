@@ -76,7 +76,18 @@ var UserCtrl = {
       // brad
       next(Errors.saveError());
     });
-  } // end logout method
+  }, // end logout method
+
+  modifySettings: function(req, res, next) {
+    // update settings based on the user's passed settings list
+    req.session.user.modifySettings(req.body.settings).then(function(r) {
+      // we did it yay
+      if (r) res.send(r); // should return an updated copy of the settings obj
+    }).catch(function(err) {
+      // wtf?!
+      next(err);
+    });
+  } // end modifySettings method
 
 };
 
