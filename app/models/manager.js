@@ -112,13 +112,18 @@ manager_schema.methods.addField = function(field) {
       Wlog.log("rejected unsafe field db name: " + field.db_name, "security");
       return reject(Errors.notSafe());
     }
-    // aight
+    if (!Wregx.isSafeName(field.type) || Field.types().indexOf(field.type) === -1) {
+      Wlog.log("rejected unsafe field type: " + field.type, "security");
+      return reject(Errors.notSafe());
+    }
     manager.custom_fields.push(new Field(field));
     manager.save().then(function(r) {
       if (r)
         resolve(r);
       else
-        reject("save err");
+        throw Errors.saveError();
+    }).catch(function(err) {
+      reject(err);
     });
   }); // end promise
 };

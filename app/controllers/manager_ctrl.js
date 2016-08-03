@@ -36,7 +36,7 @@ var ManagerCtrl = {
         Manager.findById(req.body.manager).then(function(m) {
           // what it brad
           if (!m)
-            reject('bad brad');
+            return reject(Errors.noMatch());
           // add the field
           m.addField(req.body.field).then(function(updated_manager) {
             // saved and updated

@@ -10,6 +10,15 @@ var field_schema = mongoose.Schema({
   order: Number
 });
 
+field_schema.statics.types = function() {
+  return [
+    "string",
+    "int",
+    "date",
+    "email"
+  ];
+};
+
 
 var Field = mongoose.model('Field', field_schema);
 

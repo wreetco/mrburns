@@ -116,6 +116,8 @@ record_schema.statics.new = function(record_in, m_id, user) {
     }).then(function(r) {
       return new Promise(function(res, rej) {
         // really the last thing to do is walk the tags, set the refs
+        if (!record_in.tags)
+          return res(r);
         Tag.resolveTags(record_in.tags).then(function(tags) {
           r.tags = tags;
           res(r);
@@ -124,19 +126,16 @@ record_schema.statics.new = function(record_in, m_id, user) {
         });
       });
     }).then(function(r) {
-      console.log('record in');
-      console.log(record_in);
-      console.log('----');
-      if (record_in.id && Wregx.isHexstr(record_in.id)) r._id = record_in.id;
+      if (record_in.id)
+        if(Wregx.isHexstr(record_in.id)) r._id = record_in.id;
       r.manager = m._id;
       if (m.records.indexOf(r._id) === -1) m.records.push(r);
       m.save();
-      console.log('record');
-      console.log(r);
       //r.save().then(function(record) {
-      Record.update({_id: r.id}, r, {
+      Record.findOneAndUpdate({_id: r._id}, r, {
         upsert: true,
-        setDefaultsOnInsert: true
+        new: true
+        //setDefaultsOnInsert: true
       }).then(function(record) {
         if (record)
           resolve(record);
